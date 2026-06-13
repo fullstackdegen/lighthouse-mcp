@@ -1,7 +1,17 @@
 import * as chromeLauncher from "chrome-launcher";
-import lighthouse from "lighthouse";
+import lighthouse, { type Config, type Flags, type Result } from "lighthouse";
 
-import { formatAuditReport, type LighthouseReport } from "./report.js";
+import { getAuditProfiles } from "./profiles.js";
+import {
+  buildAgentReadyReport,
+  type CollectedProfileRuns,
+} from "./report-builder.js";
+import type {
+  AgentReadyLighthouseReport,
+  AuditMode,
+  ProfileName,
+} from "./report-schema.js";
+import { assertPublicHttpUrl } from "./url-policy.js";
 
 interface ChromeProcess {
   port: number;
@@ -14,71 +24,125 @@ interface WebsiteAuditorDependencies {
   ) => Promise<ChromeProcess>;
   runLighthouse: (
     url: string,
-    flags: NonNullable<Parameters<typeof lighthouse>[1]>,
-  ) => Promise<{ lhr: unknown } | undefined>;
+    flags: Flags,
+    config?: Config,
+  ) => Promise<{ lhr: Result } | undefined>;
+  validateUrl: (input: unknown) => Promise<URL>;
+  now: () => Date;
 }
 
-/**
- * Runs Lighthouse in an isolated Chrome process and returns a Markdown summary.
- */
+export type AuditWebsite = (
+  url: URL,
+  mode: AuditMode,
+) => Promise<AgentReadyLighthouseReport>;
+
 export const auditWebsite = createWebsiteAuditor({
   launchChrome: chromeLauncher.launch,
-  runLighthouse: lighthouse,
+  runLighthouse: async (url, flags, config) => lighthouse(url, flags, config),
+  validateUrl: assertPublicHttpUrl,
+  now: () => new Date(),
 });
 
 /**
- * Builds a website auditor with replaceable process boundaries for testing.
+ * Builds a deterministic mobile and desktop Lighthouse audit coordinator.
  */
 export function createWebsiteAuditor(
   dependencies: WebsiteAuditorDependencies,
-): (url: URL) => Promise<string> {
-  return async (url: URL): Promise<string> => {
-    let chrome: ChromeProcess | undefined;
+): AuditWebsite {
+  return async (
+    requestedUrl: URL,
+    mode: AuditMode,
+  ): Promise<AgentReadyLighthouseReport> => {
+    const attemptedRuns = mode === "reliable" ? 3 : 1;
+    const profiles = {} as Record<ProfileName, CollectedProfileRuns>;
 
-    try {
-      chrome = await dependencies.launchChrome({
-        chromeFlags: buildChromeFlags(),
-        logLevel: "silent",
-      });
-
-      const runnerResult = await dependencies.runLighthouse(url.href, {
-        logLevel: "silent",
-        output: "json",
-        onlyCategories: [
-          "performance",
-          "accessibility",
-          "best-practices",
-          "seo",
-        ],
-        port: chrome.port,
-      });
-
-      if (!runnerResult?.lhr) {
-        throw new Error("Lighthouse did not produce a valid report.");
-      }
-
-      return formatAuditReport(
-        url.href,
-        runnerResult.lhr as LighthouseReport,
+    for (const profile of getAuditProfiles()) {
+      profiles[profile.name] = await collectProfileRuns(
+        dependencies,
+        requestedUrl,
+        profile.name,
+        profile.config,
+        attemptedRuns,
       );
-    } finally {
-      if (chrome) {
-        try {
-          chrome.kill();
-        } catch (error) {
-          console.error("Failed to terminate the Chrome process:", error);
+    }
+
+    return buildAgentReadyReport({
+      requestedUrl: requestedUrl.href,
+      mode,
+      generatedAt: dependencies.now(),
+      profiles,
+    });
+  };
+}
+
+async function collectProfileRuns(
+  dependencies: WebsiteAuditorDependencies,
+  requestedUrl: URL,
+  profile: ProfileName,
+  config: Config | undefined,
+  attemptedRuns: number,
+): Promise<CollectedProfileRuns> {
+  const runs: Result[] = [];
+  const failures: string[] = [];
+  let chrome: ChromeProcess | undefined;
+
+  try {
+    const validatedUrl = await dependencies.validateUrl(requestedUrl.href);
+    chrome = await dependencies.launchChrome({
+      chromeFlags: buildChromeFlags(),
+      logLevel: "silent",
+    });
+
+    for (let runIndex = 0; runIndex < attemptedRuns; runIndex += 1) {
+      try {
+        const runnerResult = await dependencies.runLighthouse(
+          validatedUrl.href,
+          {
+            logLevel: "silent",
+            output: "json",
+            onlyCategories: [
+              "performance",
+              "accessibility",
+              "best-practices",
+              "seo",
+            ],
+            port: chrome.port,
+          },
+          config,
+        );
+        if (!runnerResult?.lhr) {
+          throw new Error(
+            `Lighthouse did not produce a valid ${profile} report.`,
+          );
         }
+        runs.push(runnerResult.lhr);
+      } catch (error) {
+        failures.push(toFailureMessage(error));
       }
     }
-  };
+  } catch (error) {
+    failures.push(toFailureMessage(error));
+  } finally {
+    if (chrome) {
+      try {
+        chrome.kill();
+      } catch (error) {
+        console.error("Failed to terminate the Chrome process:", error);
+      }
+    }
+  }
+
+  return { attemptedRuns, failures, runs };
 }
 
 function buildChromeFlags(): string[] {
   const flags = ["--headless=new", "--disable-dev-shm-usage"];
-
   if (process.env.LIGHTHOUSE_CHROME_NO_SANDBOX === "true") {
     flags.push("--no-sandbox");
   }
-
   return flags;
+}
+
+function toFailureMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "Unknown Lighthouse failure.";
 }
