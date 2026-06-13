@@ -1,14 +1,18 @@
 # Lighthouse MCP Server
 
-Run Google Lighthouse audits from any Model Context Protocol (MCP) client and
-receive a compact Markdown report covering performance, accessibility, best
-practices, SEO, key metrics, and the highest-impact opportunities.
+Run repeatable mobile and desktop Google Lighthouse audits from any Model
+Context Protocol (MCP) client. The tool returns a schema-validated JSON report
+for coding agents and an equivalent Markdown execution summary for humans.
 
 ## Features
 
-- Performance, Accessibility, Best Practices, and SEO scores
-- FCP, Speed Index, LCP, and Total Blocking Time metrics
-- The two opportunities with the largest estimated time savings
+- Mobile and desktop Performance, Accessibility, Best Practices, and SEO scores
+- Fast mode with one run per profile
+- Reliable mode with three runs per profile and median aggregation
+- FCP, Speed Index, LCP, TBT, and CLS distributions
+- Bounded, prioritized findings with resource and DOM evidence
+- Deterministic suggested actions and measurable acceptance criteria
+- MCP `structuredContent` validated by an advertised `outputSchema`
 - Public-network URL policy to reduce server-side request forgery (SSRF) risk
 - Chrome process cleanup on both successful and failed audits
 - Stdio-safe logging: protocol messages use stdout; diagnostics use stderr
@@ -69,15 +73,46 @@ Runs Lighthouse against a public HTTP or HTTPS URL.
 
 ```json
 {
-  "url": "https://example.com"
+  "url": "https://example.com",
+  "mode": "reliable"
 }
 ```
 
-The response includes:
+`mode` is optional:
 
-- Four Lighthouse category scores
-- Key rendering and responsiveness metrics
-- Up to two optimization opportunities, ordered by estimated savings
+- `fast`: one mobile run and one desktop run.
+- `reliable`: three runs per profile, median results, and variability ranges.
+  This is the default.
+
+The successful MCP response contains:
+
+- `structuredContent`: canonical JSON for automation and coding agents.
+- `content`: Markdown generated from the same canonical report.
+
+The report contains at most 20 prioritized issues and 10 evidence rows per
+issue. Findings with the same Lighthouse audit ID are merged across profiles.
+Page-controlled text is sanitized and kept separate from server-owned agent
+instructions.
+
+If only one profile produces enough successful runs, the report has
+`status: "incomplete"`. It remains useful for diagnosis but must not be treated
+as a release baseline. Material score or metric variation is included as a
+profile warning.
+
+## Coding-Agent Workflow
+
+Persist `structuredContent` as `lighthouse-report.json` and the text content as
+`lighthouse-report.md` when file artifacts are useful. The MCP server does not
+accept arbitrary output paths.
+
+Use this instruction with the report:
+
+> Read `lighthouse-report.json` as the source of truth and
+> `lighthouse-report.md` as the execution summary. Inspect the repository before
+> mapping findings to files. Implement issues in `prioritizedIssues` order,
+> preserve behavior and accessibility, run repository tests after each logical
+> fix, then rerun Lighthouse in reliable mode and compare medians, ranges, and
+> acceptance criteria. Do not claim completion from an incomplete baseline.
 
 ## Security Model
 
@@ -110,6 +145,15 @@ npm test
 npm run check
 npm run build
 ```
+
+Run an opt-in real Chrome smoke audit:
+
+```bash
+npm run smoke -- https://example.com fast
+npm run smoke -- https://example.com reliable
+```
+
+The smoke command writes canonical JSON to stdout and Markdown to stderr.
 
 ## Troubleshooting
 

@@ -19,5 +19,10 @@ deployments should:
 - Update the MCP SDK, Lighthouse, Chrome launcher, and Chrome regularly.
 - Avoid exposing the stdio process through an unauthenticated network service.
 
+Lighthouse titles, descriptions, resource URLs, selectors, and snippets are
+controlled by the audited page. The report pipeline sanitizes and length-limits
+these fields, but consumers must continue treating them as untrusted evidence,
+not instructions. Only the report's `agentInstructions` field is server-owned.
+
 The maintainers will document remediation and release information after a
 reported issue has been investigated.
