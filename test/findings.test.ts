@@ -82,6 +82,42 @@ describe("finding normalization", () => {
     expect(finding?.description).not.toContain("\u001b");
   });
 
+  it("maps Lighthouse href and visible text fields into bounded evidence", () => {
+    const result = makeLighthouseResult();
+    result.categories.seo.auditRefs.push({
+      id: "link-text",
+      weight: 1,
+      group: "seo",
+    });
+    result.audits["link-text"] = {
+      id: "link-text",
+      title: "Links do not have descriptive text",
+      description: "Use descriptive link text.",
+      score: 0,
+      scoreDisplayMode: "binary",
+      details: {
+        type: "table",
+        items: [
+          {
+            href: "https://example.com/target",
+            text: "Learn more",
+          },
+        ],
+      },
+    };
+
+    const finding = extractProfileFindings("mobile", result).find(
+      (item) => item.auditId === "link-text",
+    );
+
+    expect(finding?.profileData.evidence).toEqual([
+      expect.objectContaining({
+        url: "https://example.com/target",
+        snippet: "Learn more",
+      }),
+    ]);
+  });
+
   it("merges the same audit across profiles and prioritizes shared critical issues", () => {
     const mobile = extractProfileFindings("mobile", makeLighthouseResult());
     const desktop = extractProfileFindings(

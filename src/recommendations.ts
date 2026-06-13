@@ -138,7 +138,25 @@ const CATALOG: Record<string, CatalogEntry> = {
     ["The Lighthouse canonical audit passes."],
     "https://developer.chrome.com/docs/lighthouse/seo/canonical/",
   ),
+  charset: entry(
+    ["Declare UTF-8 in the first 1,024 bytes of the HTML or in the Content-Type response header."],
+    ["The Lighthouse charset audit passes."],
+    "https://developer.chrome.com/docs/lighthouse/best-practices/charset/",
+  ),
+  "link-text": entry(
+    ["Replace generic link labels with text that describes the destination or action."],
+    ["The Lighthouse link-text audit passes."],
+    "https://developer.chrome.com/docs/lighthouse/seo/link-text/",
+  ),
 };
+
+const TBT_RELATED_AUDITS = new Set([
+  "unused-javascript",
+  "mainthread-work-breakdown",
+  "bootup-time",
+  "third-party-summary",
+  "total-blocking-time",
+]);
 
 export function getRecommendation(
   auditId: string,
@@ -150,6 +168,10 @@ export function getRecommendation(
       ? "Keep median mobile Total Blocking Time at or below 200 ms."
       : "Keep median desktop Total Blocking Time at or below 150 ms.";
 
+  const profileCriteria = TBT_RELATED_AUDITS.has(auditId)
+    ? [tbtCriterion]
+    : [];
+
   if (!catalogEntry) {
     return {
       suggestedActions: [
@@ -157,7 +179,7 @@ export function getRecommendation(
       ],
       acceptanceCriteria: [
         "The affected Lighthouse audit passes or shows a measurable improvement.",
-        tbtCriterion,
+        ...profileCriteria,
       ],
       documentationUrl: null,
     };
@@ -165,7 +187,7 @@ export function getRecommendation(
 
   return {
     suggestedActions: [...catalogEntry.actions],
-    acceptanceCriteria: [...catalogEntry.criteria, tbtCriterion],
+    acceptanceCriteria: [...catalogEntry.criteria, ...profileCriteria],
     documentationUrl: catalogEntry.documentationUrl,
   };
 }

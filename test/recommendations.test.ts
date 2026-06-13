@@ -21,6 +21,9 @@ describe("recommendations", () => {
     const result = getRecommendation("custom-audit", "desktop");
 
     expect(result.suggestedActions[0]).toMatch(/Inspect the affected resource/i);
+    expect(result.acceptanceCriteria.join(" ")).not.toMatch(
+      /Total Blocking Time/i,
+    );
     expect(result.documentationUrl).toBeNull();
   });
 });

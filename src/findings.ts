@@ -110,7 +110,10 @@ export function mergeAndPrioritizeFindings(
         description: finding.description,
         profiles: { [finding.profile]: finding.profileData },
         suggestedActions: recommendation.suggestedActions,
-        acceptanceCriteria: recommendation.acceptanceCriteria,
+        acceptanceCriteria: unique([
+          ...recommendation.acceptanceCriteria,
+          categoryScoreCriterion(finding.category),
+        ]),
         documentationUrl: recommendation.documentationUrl,
       });
       continue;
@@ -172,9 +175,12 @@ function extractEvidence(
     }
     const node = isRecord(rawItem.node) ? rawItem.node : undefined;
     const row: ReportEvidence = {
-      url: sanitizeNullableText(rawItem.url, 500),
+      url: sanitizeNullableText(rawItem.url ?? rawItem.href, 500),
       selector: sanitizeNullableText(node?.selector ?? rawItem.selector, 300),
-      snippet: sanitizeNullableText(node?.snippet ?? rawItem.snippet, 500),
+      snippet: sanitizeNullableText(
+        node?.snippet ?? rawItem.snippet ?? rawItem.text,
+        500,
+      ),
       totalBytes: finiteOrNull(rawItem.totalBytes),
       wastedBytes: finiteOrNull(rawItem.wastedBytes),
       wastedMs: finiteOrNull(rawItem.wastedMs),
@@ -322,4 +328,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
+}
+
+function categoryScoreCriterion(category: CategoryName): string {
+  return `Raise the median ${category} score to at least 90/100.`;
 }
