@@ -37,5 +37,8 @@ jobs:
       - name: Build package
         run: npm run build
 
+      - name: Validate release surface
+        run: npm run validate:release
+
       - name: Inspect package contents
         run: npm pack --dry-run
