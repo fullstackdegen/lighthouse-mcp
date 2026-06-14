@@ -57,6 +57,9 @@ as a local stdio process:
 npx -y mcp-server-lighthouse
 ```
 
+Releases published through the trusted GitHub Actions workflow include npm
+provenance.
+
 ### Claude Desktop
 
 Open Claude Desktop's developer configuration and add:
