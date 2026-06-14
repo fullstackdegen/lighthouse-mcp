@@ -1,30 +1,49 @@
 {
   "name": "mcp-server-lighthouse",
   "version": "0.1.0",
-  "description": "An MCP server for running Google Lighthouse audits against public websites.",
+  "description": "Turn mobile and desktop Lighthouse audits into evidence-backed coding-agent tasks.",
   "type": "module",
   "bin": {
     "mcp-server-lighthouse": "dist/index.js"
   },
   "files": [
     "dist",
+    "docs/assets",
+    "examples",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm test && npm run check && npm run build && npm run validate:release",
+    "smoke": "npm run build && node scripts/smoke-audit.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "validate:release": "node scripts/validate-release.mjs"
   },
   "keywords": [
     "mcp",
     "model-context-protocol",
     "lighthouse",
-    "performance",
+    "coding-agent",
+    "ai-agent",
+    "core-web-vitals",
+    "web-performance",
     "accessibility",
-    "seo"
+    "seo",
+    "claude",
+    "codex",
+    "cursor"
   ],
+  "homepage": "https://github.com/fullstackdegen/lighthouse-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/fullstackdegen/lighthouse-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullstackdegen/lighthouse-mcp.git"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=20.0.0"
