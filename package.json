@@ -8,15 +8,19 @@
   },
   "files": [
     "dist",
+    "docs/assets",
+    "examples",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm test && npm run check && npm run build && npm run validate:release",
     "smoke": "npm run build && node scripts/smoke-audit.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "validate:release": "node scripts/validate-release.mjs"
   },
   "keywords": [
     "mcp",
