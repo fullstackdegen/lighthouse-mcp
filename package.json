@@ -1,7 +1,7 @@
 {
   "name": "mcp-server-lighthouse",
   "version": "0.1.0",
-  "description": "An MCP server for running Google Lighthouse audits against public websites.",
+  "description": "Turn mobile and desktop Lighthouse audits into evidence-backed coding-agent tasks.",
   "type": "module",
   "bin": {
     "mcp-server-lighthouse": "dist/index.js"
@@ -26,10 +26,24 @@
     "mcp",
     "model-context-protocol",
     "lighthouse",
-    "performance",
+    "coding-agent",
+    "ai-agent",
+    "core-web-vitals",
+    "web-performance",
     "accessibility",
-    "seo"
+    "seo",
+    "claude",
+    "codex",
+    "cursor"
   ],
+  "homepage": "https://github.com/fullstackdegen/lighthouse-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/fullstackdegen/lighthouse-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullstackdegen/lighthouse-mcp.git"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=20.0.0"
