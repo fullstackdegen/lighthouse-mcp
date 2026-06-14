@@ -1,0 +1,816 @@
+{
+  "schemaVersion": "1.0",
+  "status": "complete",
+  "target": {
+    "requestedUrl": "https://www.commalabs.co/tr",
+    "finalUrls": {
+      "mobile": "https://www.commalabs.co/tr",
+      "desktop": "https://www.commalabs.co/tr"
+    }
+  },
+  "environment": {
+    "generatedAt": "2026-06-14T17:35:41.505Z",
+    "lighthouseVersion": "12.8.2",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36",
+    "mode": "fast",
+    "runsPerProfile": 1
+  },
+  "profiles": {
+    "mobile": {
+      "status": "complete",
+      "successfulRuns": 1,
+      "attemptedRuns": 1,
+      "failures": [],
+      "configuration": {
+        "formFactor": "mobile",
+        "viewport": {
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75
+        },
+        "throttlingMethod": "simulate"
+      },
+      "scores": {
+        "performance": {
+          "median": 93,
+          "min": 93,
+          "max": 93,
+          "samples": [
+            93
+          ],
+          "unit": "score"
+        },
+        "accessibility": {
+          "median": 96,
+          "min": 96,
+          "max": 96,
+          "samples": [
+            96
+          ],
+          "unit": "score"
+        },
+        "best-practices": {
+          "median": 96,
+          "min": 96,
+          "max": 96,
+          "samples": [
+            96
+          ],
+          "unit": "score"
+        },
+        "seo": {
+          "median": 92,
+          "min": 92,
+          "max": 92,
+          "samples": [
+            92
+          ],
+          "unit": "score"
+        }
+      },
+      "metrics": {
+        "firstContentfulPaint": {
+          "median": 966.33,
+          "min": 966.33,
+          "max": 966.33,
+          "samples": [
+            966.33
+          ],
+          "unit": "ms"
+        },
+        "speedIndex": {
+          "median": 2178.727117995397,
+          "min": 2178.727117995397,
+          "max": 2178.727117995397,
+          "samples": [
+            2178.727117995397
+          ],
+          "unit": "ms"
+        },
+        "largestContentfulPaint": {
+          "median": 3216.33,
+          "min": 3216.33,
+          "max": 3216.33,
+          "samples": [
+            3216.33
+          ],
+          "unit": "ms"
+        },
+        "totalBlockingTime": {
+          "median": 15,
+          "min": 15,
+          "max": 15,
+          "samples": [
+            15
+          ],
+          "unit": "ms"
+        },
+        "cumulativeLayoutShift": {
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "samples": [
+            0
+          ],
+          "unit": "unitless"
+        }
+      },
+      "variabilityWarnings": []
+    },
+    "desktop": {
+      "status": "complete",
+      "successfulRuns": 1,
+      "attemptedRuns": 1,
+      "failures": [],
+      "configuration": {
+        "formFactor": "desktop",
+        "viewport": {
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1
+        },
+        "throttlingMethod": "simulate"
+      },
+      "scores": {
+        "performance": {
+          "median": 100,
+          "min": 100,
+          "max": 100,
+          "samples": [
+            100
+          ],
+          "unit": "score"
+        },
+        "accessibility": {
+          "median": 96,
+          "min": 96,
+          "max": 96,
+          "samples": [
+            96
+          ],
+          "unit": "score"
+        },
+        "best-practices": {
+          "median": 96,
+          "min": 96,
+          "max": 96,
+          "samples": [
+            96
+          ],
+          "unit": "score"
+        },
+        "seo": {
+          "median": 92,
+          "min": 92,
+          "max": 92,
+          "samples": [
+            92
+          ],
+          "unit": "score"
+        }
+      },
+      "metrics": {
+        "firstContentfulPaint": {
+          "median": 305.5565,
+          "min": 305.5565,
+          "max": 305.5565,
+          "samples": [
+            305.5565
+          ],
+          "unit": "ms"
+        },
+        "speedIndex": {
+          "median": 375.0985643327223,
+          "min": 375.0985643327223,
+          "max": 375.0985643327223,
+          "samples": [
+            375.0985643327223
+          ],
+          "unit": "ms"
+        },
+        "largestContentfulPaint": {
+          "median": 585.5565,
+          "min": 585.5565,
+          "max": 585.5565,
+          "samples": [
+            585.5565
+          ],
+          "unit": "ms"
+        },
+        "totalBlockingTime": {
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "samples": [
+            0
+          ],
+          "unit": "ms"
+        },
+        "cumulativeLayoutShift": {
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "samples": [
+            0
+          ],
+          "unit": "unitless"
+        }
+      },
+      "variabilityWarnings": []
+    }
+  },
+  "prioritizedIssues": [
+    {
+      "auditId": "link-name",
+      "category": "accessibility",
+      "severity": "critical",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Links do not have a discernible name",
+      "description": "Link text (and alternate text for images, when used as links) that is discernible, unique, and focusable improves the navigation experience for screen reader users. [Learn how to make links accessible](https://dequeuniversity.com/rules/axe/4.10/link-name).",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": null,
+              "selector": "div.border-t-2 > div.flex > div.flex > a.text-gray-600",
+              "snippet": "<a class=\"text-gray-600 hover:text-black transition-colors\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.linkedin.com/company/commalabs\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "div.border-t-2 > div.flex > div.flex > a.text-gray-600",
+              "snippet": "<a class=\"text-gray-600 hover:text-black transition-colors\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.instagram.com/commalabs.co\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#consultation\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#team\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#contact\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"https://wa.me/905372519038\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": null,
+              "selector": "div.border-t-2 > div.flex > div.flex > a.text-gray-600",
+              "snippet": "<a class=\"text-gray-600 hover:text-black transition-colors\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.linkedin.com/company/commalabs\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "div.border-t-2 > div.flex > div.flex > a.text-gray-600",
+              "snippet": "<a class=\"text-gray-600 hover:text-black transition-colors\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.instagram.com/commalabs.co\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#consultation\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#team\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"#contact\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": "nav.fixed > div.mx-auto > div.flex > a.whitespace-nowrap",
+              "snippet": "<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-vis…\" data-state=\"closed\" href=\"https://wa.me/905372519038\">",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Give every link a discernible accessible name."
+      ],
+      "acceptanceCriteria": [
+        "All link elements pass the Lighthouse link-name audit.",
+        "Raise the median accessibility score to at least 90/100."
+      ],
+      "documentationUrl": "https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-in-context.html"
+    },
+    {
+      "auditId": "largest-contentful-paint-element",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile"
+      ],
+      "title": "Largest Contentful Paint element",
+      "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "3,220 ms",
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": []
+        }
+      },
+      "suggestedActions": [
+        "Prioritize the LCP resource and reduce work required to render its element."
+      ],
+      "acceptanceCriteria": [
+        "Keep median Largest Contentful Paint at or below 2,500 ms.",
+        "Raise the median performance score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/"
+    },
+    {
+      "auditId": "unused-javascript",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Reduce unused JavaScript",
+      "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "Est savings of 61 KiB",
+          "impact": {
+            "estimatedSavingsMs": 300,
+            "estimatedSavingsBytes": 62761
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/f7f8b7557f00a7b3.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 53137,
+              "wastedBytes": 38931,
+              "wastedMs": null
+            },
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/db74325abc5b5b35.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 71530,
+              "wastedBytes": 23830,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0,
+          "displayValue": "Est savings of 61 KiB",
+          "impact": {
+            "estimatedSavingsMs": 40,
+            "estimatedSavingsBytes": 62865
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/f7f8b7557f00a7b3.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 53137,
+              "wastedBytes": 38931,
+              "wastedMs": null
+            },
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/db74325abc5b5b35.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 71539,
+              "wastedBytes": 23934,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Remove unused modules and split non-critical JavaScript into on-demand chunks."
+      ],
+      "acceptanceCriteria": [
+        "Reduce the reported wasted JavaScript bytes.",
+        "Keep median mobile Total Blocking Time at or below 200 ms.",
+        "Raise the median performance score to at least 90/100.",
+        "Keep median desktop Total Blocking Time at or below 150 ms."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/"
+    },
+    {
+      "auditId": "legacy-javascript",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Avoid serving legacy JavaScript to modern browsers",
+      "description": "Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile [Baseline](https://web.dev/baseline) features, unless you know you must support legacy browsers. [Learn why most sites can deploy ES6+ code without transpiling](https://philipwalton.com/articles/the-state-of-es5-on-the-web/)",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "Est savings of 14 KiB",
+          "impact": {
+            "estimatedSavingsMs": 150,
+            "estimatedSavingsBytes": 13950
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/db74325abc5b5b35.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 0,
+              "wastedBytes": 13988,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0.5,
+          "displayValue": "Est savings of 14 KiB",
+          "impact": {
+            "estimatedSavingsMs": 0,
+            "estimatedSavingsBytes": 13951
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/db74325abc5b5b35.js",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 0,
+              "wastedBytes": 13997,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Adjust the JavaScript build target to avoid unnecessary legacy transforms and polyfills for supported browsers."
+      ],
+      "acceptanceCriteria": [
+        "Reduce the legacy JavaScript bytes reported by Lighthouse.",
+        "Raise the median performance score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/legacy-javascript/"
+    },
+    {
+      "auditId": "unused-css-rules",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Reduce unused CSS",
+      "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "Est savings of 11 KiB",
+          "impact": {
+            "estimatedSavingsMs": 150,
+            "estimatedSavingsBytes": 11222
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/eb91abd9baf32259.css",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 14175,
+              "wastedBytes": 11222,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0.5,
+          "displayValue": "Est savings of 10 KiB",
+          "impact": {
+            "estimatedSavingsMs": 0,
+            "estimatedSavingsBytes": 10702
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/eb91abd9baf32259.css",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 14175,
+              "wastedBytes": 10702,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Remove unused selectors and load non-critical styles only where required."
+      ],
+      "acceptanceCriteria": [
+        "Reduce the reported wasted CSS bytes.",
+        "Raise the median performance score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/"
+    },
+    {
+      "auditId": "network-dependency-tree-insight",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Network dependency tree",
+      "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": null,
+              "selector": null,
+              "snippet": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": null,
+              "snippet": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": null,
+              "selector": null,
+              "snippet": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            },
+            {
+              "url": null,
+              "selector": null,
+              "snippet": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Shorten critical request chains, defer non-critical dependencies, and keep preconnect hints limited to required origins."
+      ],
+      "acceptanceCriteria": [
+        "Reduce the longest critical dependency chain and remove unnecessary preconnect hints reported by Lighthouse.",
+        "Raise the median performance score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains/"
+    },
+    {
+      "auditId": "render-blocking-resources",
+      "category": "performance",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Eliminate render-blocking resources",
+      "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "Est savings of 90 ms",
+          "impact": {
+            "estimatedSavingsMs": 0,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/eb91abd9baf32259.css",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 14343,
+              "wastedBytes": null,
+              "wastedMs": 150
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0.5,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/chunks/eb91abd9baf32259.css",
+              "selector": null,
+              "snippet": null,
+              "totalBytes": 14344,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Inline critical styles and defer non-critical stylesheets and scripts."
+      ],
+      "acceptanceCriteria": [
+        "Eliminate render-blocking resources from the critical rendering path.",
+        "Raise the median performance score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/"
+    },
+    {
+      "auditId": "errors-in-console",
+      "category": "best-practices",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "Browser errors were logged to the console",
+      "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/media/fonts.woff2",
+              "selector": null,
+              "snippet": "Failed to load resource: the server responded with a status of 404 ()",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        },
+        "desktop": {
+          "score": 0,
+          "displayValue": null,
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": [
+            {
+              "url": "https://www.commalabs.co/_next/static/media/fonts.woff2",
+              "selector": null,
+              "snippet": "Failed to load resource: the server responded with a status of 404 ()",
+              "totalBytes": null,
+              "wastedBytes": null,
+              "wastedMs": null
+            }
+          ]
+        }
+      },
+      "suggestedActions": [
+        "Resolve application, resource-loading, and browser console errors."
+      ],
+      "acceptanceCriteria": [
+        "The audited page produces no Lighthouse-reported browser errors.",
+        "Raise the median best-practices score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/"
+    },
+    {
+      "auditId": "robots-txt",
+      "category": "seo",
+      "severity": "high",
+      "affectedProfiles": [
+        "mobile",
+        "desktop"
+      ],
+      "title": "robots.txt is not valid",
+      "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+      "profiles": {
+        "mobile": {
+          "score": 0,
+          "displayValue": "6 errors found",
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": []
+        },
+        "desktop": {
+          "score": 0,
+          "displayValue": "6 errors found",
+          "impact": {
+            "estimatedSavingsMs": null,
+            "estimatedSavingsBytes": null
+          },
+          "evidence": []
+        }
+      },
+      "suggestedActions": [
+        "Fix robots.txt syntax errors, remove unsupported directives, and serve the file as plain text with an HTTP 200 response."
+      ],
+      "acceptanceCriteria": [
+        "Serve a valid robots.txt file that passes the Lighthouse robots-txt audit.",
+        "Raise the median seo score to at least 90/100."
+      ],
+      "documentationUrl": "https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/"
+    }
+  ],
+  "agentInstructions": [
+    "Treat structuredContent as the source of truth.",
+    "Inspect the repository before proposing file-level changes.",
+    "Address issues in prioritizedIssues order.",
+    "Prefer one source change that resolves the same audit on both profiles.",
+    "Preserve user-visible behavior and accessibility.",
+    "Run the repository's tests after each logical fix.",
+    "Rerun this Lighthouse tool in reliable mode.",
+    "Compare medians and variability against the report's acceptance criteria.",
+    "Do not claim completion when the new report is incomplete or materially more variable than the baseline."
+  ]
+}
