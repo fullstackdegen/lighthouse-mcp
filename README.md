@@ -57,8 +57,8 @@ as a local stdio process:
 npx -y mcp-server-lighthouse
 ```
 
-Releases published through the trusted GitHub Actions workflow include npm
-provenance.
+Future releases can be published through the GitHub Actions release workflow
+once npm trusted publishing is configured for the package.
 
 ### Claude Desktop
 
@@ -78,6 +78,22 @@ Open Claude Desktop's developer configuration and add:
 Restart Claude Desktop after saving the configuration. See the
 [official MCP local-server guide](https://modelcontextprotocol.io/docs/develop/connect-local-servers).
 
+### Claude Code
+
+Add the server with the Claude Code CLI:
+
+```bash
+claude mcp add lighthouse -- npx -y mcp-server-lighthouse
+```
+
+For local development audits, pass the explicit localhost opt-in:
+
+```bash
+claude mcp add --env LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true --transport stdio lighthouse -- npx -y mcp-server-lighthouse
+```
+
+See the [official Claude Code MCP documentation](https://code.claude.com/docs/en/mcp).
+
 ### Codex
 
 Add the server with the Codex CLI:
@@ -96,6 +112,40 @@ args = ["-y", "mcp-server-lighthouse"]
 
 See the [official Codex MCP documentation](https://developers.openai.com/codex/mcp).
 
+### VS Code And GitHub Copilot
+
+Create a workspace or user-level `.mcp.json` file with:
+
+```json
+{
+  "servers": {
+    "lighthouse": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-lighthouse"]
+    }
+  }
+}
+```
+
+You can also register the server from a terminal:
+
+```bash
+code --add-mcp '{"name":"lighthouse","command":"npx","args":["-y","mcp-server-lighthouse"]}'
+```
+
+See the [official VS Code MCP server documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+
+### Cursor
+
+Configure a local stdio MCP server:
+
+- name: `lighthouse`
+- command: `npx`
+- arguments: `-y`, `mcp-server-lighthouse`
+
+If your Cursor version supports environment variables for MCP servers, add
+`LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` when you need localhost audits.
+
 ### Other MCP Clients
 
 For clients that accept the standard `mcpServers` JSON shape, use the Claude
@@ -103,6 +153,31 @@ Desktop configuration above. Otherwise configure a local stdio server with:
 
 - command: `npx`
 - arguments: `-y`, `mcp-server-lighthouse`
+
+## Localhost And Private Targets
+
+By default, Lighthouse MCP only accepts publicly routable HTTP and HTTPS URLs.
+This is the correct default for hosted agents and shared environments.
+
+For developer machines, enable explicit localhost auditing:
+
+```bash
+LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true npx -y mcp-server-lighthouse
+```
+
+Then audit the local app through your MCP client:
+
+```json
+{
+  "url": "http://localhost:3000",
+  "mode": "fast"
+}
+```
+
+The opt-in only allows loopback-style targets such as `localhost`,
+`*.localhost`, `127.0.0.0/8`, and `::1`. Private LAN ranges, link-local
+addresses, multicast/reserved ranges, and cloud metadata addresses remain
+blocked.
 
 ## Tool
 
@@ -156,9 +231,10 @@ The URL policy rejects:
 
 - protocols other than HTTP and HTTPS;
 - URLs containing embedded credentials;
-- localhost names;
-- loopback, private, link-local, multicast, reserved, and metadata-network IPs;
-- hostnames that resolve to any non-public address.
+- localhost names unless `LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` is set;
+- loopback IPs unless `LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` is set;
+- private, link-local, multicast, reserved, and metadata-network IPs;
+- non-localhost hostnames that resolve to any non-public address.
 
 These checks reduce SSRF exposure but do not replace infrastructure controls.
 Production operators should run the server in an isolated environment and deny
@@ -211,8 +287,10 @@ virtual machine provides an equivalent isolation boundary.
 
 **The target URL is rejected**
 
-Only publicly routable HTTP and HTTPS targets are accepted. Local development
-sites and private network addresses are intentionally blocked.
+Only publicly routable HTTP and HTTPS targets are accepted by default. For a
+local development server, start Lighthouse MCP with
+`LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` and use a loopback URL such as
+`http://localhost:3000`. Private network addresses remain blocked.
 
 ## Contributing
 
