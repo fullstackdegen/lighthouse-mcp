@@ -8,9 +8,15 @@ import { createLighthouseServer } from "../src/server.js";
 import { makeLighthouseResult } from "./fixtures/lighthouse-results.js";
 
 const clients: Client[] = [];
+const originalAllowLocalhost = process.env.LIGHTHOUSE_MCP_ALLOW_LOCALHOST;
 
 afterEach(async () => {
   await Promise.all(clients.splice(0).map((client) => client.close()));
+  if (originalAllowLocalhost === undefined) {
+    delete process.env.LIGHTHOUSE_MCP_ALLOW_LOCALHOST;
+  } else {
+    process.env.LIGHTHOUSE_MCP_ALLOW_LOCALHOST = originalAllowLocalhost;
+  }
 });
 
 describe("Lighthouse MCP server", () => {
@@ -99,6 +105,23 @@ describe("Lighthouse MCP server", () => {
 
     expect(auditWebsite).toHaveBeenCalledWith(
       new URL("https://example.com"),
+      "fast",
+    );
+  });
+
+  it("allows localhost through the default validator when dev mode is enabled", async () => {
+    process.env.LIGHTHOUSE_MCP_ALLOW_LOCALHOST = "true";
+    const report = makeReport("fast");
+    const auditWebsite = vi.fn(async () => report);
+    const client = await connectTestClient({ auditWebsite });
+
+    await client.callTool({
+      name: "analyze_website_performance",
+      arguments: { url: "http://localhost:3000", mode: "fast" },
+    });
+
+    expect(auditWebsite).toHaveBeenCalledWith(
+      new URL("http://localhost:3000"),
       "fast",
     );
   });
