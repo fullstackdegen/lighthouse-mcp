@@ -19,6 +19,13 @@ deployments should:
 - Update the MCP SDK, Lighthouse, Chrome launcher, and Chrome regularly.
 - Avoid exposing the stdio process through an unauthenticated network service.
 
+`LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` is intended for developer machines that
+audit local apps through loopback URLs such as `http://localhost:3000`. Do not
+enable it in shared, hosted, or CI environments unless the surrounding network
+is isolated and intentionally allowed to reach local services. This opt-in does
+not allow private LAN ranges, link-local addresses, reserved ranges, or cloud
+metadata addresses.
+
 Lighthouse titles, descriptions, resource URLs, selectors, and snippets are
 controlled by the audited page. The report pipeline sanitizes and length-limits
 these fields, but consumers must continue treating them as untrusted evidence,
