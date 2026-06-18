@@ -39,8 +39,9 @@ export function createSiteIntelligenceAnalyzer(
 ): AnalyzeSiteIntelligence {
   return async (url) => {
     const html = await dependencies.fetcher.fetchText(url);
+    const htmlText = html.text;
 
-    if (isBlankHtml(html.text)) {
+    if (!hasHtmlText(htmlText)) {
       return {
         status: "failed",
         inspectedUrl: url.href,
@@ -59,7 +60,7 @@ export function createSiteIntelligenceAnalyzer(
       };
     }
 
-    const facts = inspectHtml(html.text, url);
+    const facts = inspectHtml(htmlText, url);
     const robotsTxtUrl = new URL("/robots.txt", url);
     const sitemapXmlUrl = new URL("/sitemap.xml", url);
     const [robotsTxt, sitemapXml] = await Promise.all([
@@ -107,8 +108,8 @@ export function createSiteIntelligenceAnalyzer(
   };
 }
 
-function isBlankHtml(html: string | null): boolean {
-  return html === null || html.trim() === "";
+function hasHtmlText(html: string | null): html is string {
+  return html !== null && html.trim() !== "";
 }
 
 async function safeFetchText(
