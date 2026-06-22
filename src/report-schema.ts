@@ -1,4 +1,4 @@
-export const REPORT_SCHEMA_VERSION = "1.1" as const;
+export const REPORT_SCHEMA_VERSION = "1.2" as const;
 export const AUDIT_MODES = ["fast", "reliable"] as const;
 export const PROFILE_NAMES = ["mobile", "desktop"] as const;
 export const SEVERITIES = ["critical", "high", "medium", "low"] as const;
@@ -64,6 +64,25 @@ export interface PrioritizedIssue {
   suggestedActions: string[];
   acceptanceCriteria: string[];
   documentationUrl: string | null;
+}
+
+export interface AgentFixPackVerification {
+  rerunMode: "reliable";
+  expectedAuditIds: string[];
+}
+
+export interface AgentFixPack {
+  id: string;
+  priority: number;
+  sourceIssueIds: string[];
+  goal: string;
+  category: CategoryName;
+  severity: Severity;
+  affectedProfiles: ProfileName[];
+  repoSearchHints: string[];
+  implementationSteps: string[];
+  acceptanceCriteria: string[];
+  verification: AgentFixPackVerification;
 }
 
 export interface FetchSummary {
@@ -144,6 +163,7 @@ export interface AgentReadyLighthouseReport {
   };
   profiles: Record<ProfileName, ProfileReport>;
   prioritizedIssues: PrioritizedIssue[];
+  fixPacks: AgentFixPack[];
   siteIntelligence: SiteIntelligenceReport | null;
   agentInstructions: string[];
 }
@@ -289,6 +309,75 @@ const prioritizedIssueSchema = {
     "suggestedActions",
     "acceptanceCriteria",
     "documentationUrl",
+  ],
+} as const;
+
+const fixPackSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    id: { type: "string" },
+    priority: { type: "integer", minimum: 1 },
+    sourceIssueIds: {
+      type: "array",
+      minItems: 1,
+      maxItems: 5,
+      uniqueItems: true,
+      items: { type: "string" },
+    },
+    goal: { type: "string" },
+    category: { type: "string", enum: CATEGORIES },
+    severity: { type: "string", enum: SEVERITIES },
+    affectedProfiles: {
+      type: "array",
+      uniqueItems: true,
+      items: { type: "string", enum: PROFILE_NAMES },
+    },
+    repoSearchHints: {
+      type: "array",
+      maxItems: 8,
+      items: { type: "string" },
+    },
+    implementationSteps: {
+      type: "array",
+      minItems: 1,
+      maxItems: 6,
+      items: { type: "string" },
+    },
+    acceptanceCriteria: {
+      type: "array",
+      minItems: 1,
+      maxItems: 6,
+      items: { type: "string" },
+    },
+    verification: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rerunMode: { type: "string", enum: ["reliable"] },
+        expectedAuditIds: {
+          type: "array",
+          minItems: 1,
+          maxItems: 5,
+          uniqueItems: true,
+          items: { type: "string" },
+        },
+      },
+      required: ["rerunMode", "expectedAuditIds"],
+    },
+  },
+  required: [
+    "id",
+    "priority",
+    "sourceIssueIds",
+    "goal",
+    "category",
+    "severity",
+    "affectedProfiles",
+    "repoSearchHints",
+    "implementationSteps",
+    "acceptanceCriteria",
+    "verification",
   ],
 } as const;
 
@@ -509,6 +598,11 @@ export const lighthouseReportOutputSchema = {
       maxItems: 10,
       items: prioritizedIssueSchema,
     },
+    fixPacks: {
+      type: "array",
+      maxItems: 10,
+      items: fixPackSchema,
+    },
     siteIntelligence: {
       anyOf: [siteIntelligenceSchema, { type: "null" }],
     },
@@ -524,6 +618,7 @@ export const lighthouseReportOutputSchema = {
     "environment",
     "profiles",
     "prioritizedIssues",
+    "fixPacks",
     "siteIntelligence",
     "agentInstructions",
   ],

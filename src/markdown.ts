@@ -1,4 +1,5 @@
 import type {
+  AgentFixPack,
   AgentReadyLighthouseReport,
   NumericDistribution,
   PrioritizedIssue,
@@ -67,6 +68,7 @@ export function renderReportMarkdown(
   }
 
   appendSiteIntelligence(lines, report);
+  appendFixPacks(lines, report);
 
   lines.push("", "## Prioritized Issues");
   if (report.prioritizedIssues.length === 0) {
@@ -87,6 +89,53 @@ export function renderReportMarkdown(
   });
 
   return lines.join("\n");
+}
+
+function appendFixPacks(
+  lines: string[],
+  report: AgentReadyLighthouseReport,
+): void {
+  lines.push("", "## Agent Fix Packs");
+
+  if (report.fixPacks.length === 0) {
+    lines.push("", "No agent fix packs were generated.");
+    return;
+  }
+
+  for (const pack of report.fixPacks) {
+    appendFixPack(lines, pack);
+  }
+}
+
+function appendFixPack(lines: string[], pack: AgentFixPack): void {
+  lines.push(
+    "",
+    `### Fix Pack ${pack.priority}: ${inline(pack.goal)}`,
+    "",
+    `- Severity: **${inline(pack.severity)}**`,
+    `- Category: ${inline(pack.category)}`,
+    `- Affected profiles: ${pack.affectedProfiles.map((profile) => inline(profile)).join(", ")}`,
+    `- Source issues: ${pack.sourceIssueIds.map((id) => codeSpan(id)).join(", ")}`,
+    "- Repository search hints:",
+  );
+
+  for (const hint of pack.repoSearchHints) {
+    lines.push(`  - ${codeSpan(hint)}`);
+  }
+
+  lines.push("- Implementation steps:");
+  for (const step of pack.implementationSteps) {
+    lines.push(`  - ${codeSpan(step)}`);
+  }
+
+  lines.push("- Acceptance criteria:");
+  for (const criterion of pack.acceptanceCriteria) {
+    lines.push(`  - ${codeSpan(criterion)}`);
+  }
+
+  lines.push(
+    `- Verification: rerun this tool in ${codeSpan(pack.verification.rerunMode)} mode; expected audit IDs: ${pack.verification.expectedAuditIds.map((id) => codeSpan(id)).join(", ")}`,
+  );
 }
 
 function appendSiteIntelligence(
@@ -233,6 +282,19 @@ function formatNumber(value: number | null): string {
 
 function inline(value: string): string {
   return value.replace(/[|\r\n]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function codeSpan(value: string): string {
+  const sanitized = inline(value);
+  const longestBacktickRun = Math.max(
+    0,
+    ...[...sanitized.matchAll(/`+/g)].map((match) => match[0].length),
+  );
+  const fence = "`".repeat(longestBacktickRun + 1);
+  const padding =
+    sanitized.startsWith("`") || sanitized.endsWith("`") ? " " : "";
+
+  return `${fence}${padding}${sanitized}${padding}${fence}`;
 }
 
 function markdownFenceFor(value: string): string {

@@ -9,6 +9,7 @@ import {
   extractProfileFindings,
   mergeAndPrioritizeFindings,
 } from "./findings.js";
+import { buildFixPacks } from "./fix-packs.js";
 import {
   AGENT_INSTRUCTIONS,
   CATEGORIES,
@@ -84,6 +85,10 @@ export function buildAgentReadyReport(
       : [];
   });
   const environmentSource = successfulRuns[0]!;
+  const prioritizedIssues = [
+    ...(input.siteIntelligence?.prioritizedIssues ?? []),
+    ...mergeAndPrioritizeFindings(profileFindings),
+  ].slice(0, 10);
 
   return {
     schemaVersion: REPORT_SCHEMA_VERSION,
@@ -105,10 +110,8 @@ export function buildAgentReadyReport(
     },
     profiles: reports,
     siteIntelligence: input.siteIntelligence ?? null,
-    prioritizedIssues: [
-      ...(input.siteIntelligence?.prioritizedIssues ?? []),
-      ...mergeAndPrioritizeFindings(profileFindings),
-    ].slice(0, 10),
+    prioritizedIssues,
+    fixPacks: buildFixPacks(prioritizedIssues),
     agentInstructions: [...AGENT_INSTRUCTIONS],
   };
 }

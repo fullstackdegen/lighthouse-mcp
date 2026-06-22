@@ -19,7 +19,7 @@ afterEach(async () => {
   }
 });
 
-describe("Lighthouse MCP server", () => {
+describe("Agent Audit server", () => {
   it("publishes input and structured output schemas", async () => {
     const client = await connectTestClient();
     const result = await client.listTools();
@@ -47,8 +47,8 @@ describe("Lighthouse MCP server", () => {
     const client = await connectTestClient();
 
     expect(client.getServerVersion()).toEqual({
-      name: "mcp-server-lighthouse",
-      version: "0.2.0",
+      name: "agent-audit",
+      version: "0.3.0",
     });
   });
 

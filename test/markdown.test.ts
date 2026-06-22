@@ -125,6 +125,88 @@ describe("renderReportMarkdown", () => {
     expect(markdown).toContain("```txt\n# Example\n\n> Example page\n```");
   });
 
+  it("renders agent fix packs before prioritized issues", () => {
+    const report = buildAgentReadyReport({
+      requestedUrl: "https://example.com",
+      mode: "fast",
+      generatedAt: new Date("2026-06-13T12:00:00.000Z"),
+      profiles: {
+        mobile: {
+          attemptedRuns: 1,
+          failures: [],
+          runs: [makeLighthouseResult()],
+        },
+        desktop: {
+          attemptedRuns: 1,
+          failures: [],
+          runs: [makeLighthouseResult({ formFactor: "desktop" })],
+        },
+      },
+    });
+
+    const [pack] = report.fixPacks;
+    expect(pack).toBeDefined();
+    if (!pack) {
+      throw new Error("Expected at least one fix pack");
+    }
+
+    const maliciousHint =
+      "Search for snippet text: <img src=x onerror=alert(1)> [click](javascript:alert(1))";
+    const backtickHint = "Search for `inline code` and ``double ticks``";
+    pack.repoSearchHints.push(maliciousHint, backtickHint);
+
+    const markdown = renderReportMarkdown(report);
+
+    expect(markdown.indexOf("## Agent Fix Packs")).toBeGreaterThanOrEqual(0);
+    expect(markdown.indexOf("## Agent Fix Packs")).toBeLessThan(
+      markdown.indexOf("## Prioritized Issues"),
+    );
+    expect(markdown).toContain(`### Fix Pack 1: ${pack.goal}`);
+    expect(markdown).toContain(`- Severity: **${pack.severity}**`);
+    expect(markdown).toContain(`- Category: ${pack.category}`);
+    expect(markdown).toContain(
+      `- Affected profiles: ${pack.affectedProfiles.join(", ")}`,
+    );
+    expect(markdown).toContain(`- Source issues: \`${pack.sourceIssueIds[0]}\``);
+    expect(markdown).toContain("- Repository search hints:");
+    expect(markdown).toContain(`  - \`${pack.repoSearchHints[0]}\``);
+    expect(markdown).toContain(`  - \`${maliciousHint}\``);
+    expect(markdown).not.toContain(`  - ${maliciousHint}`);
+    expect(markdown).toContain(`  - \`\`\` ${backtickHint} \`\`\``);
+    expect(markdown).toContain("- Implementation steps:");
+    expect(markdown).toContain(`  - \`${pack.implementationSteps[0]}\``);
+    expect(markdown).toContain(`  - \`${pack.acceptanceCriteria[0]}\``);
+    expect(markdown).toContain(
+      `- Verification: rerun this tool in \`${pack.verification.rerunMode}\` mode; expected audit IDs: \`${pack.verification.expectedAuditIds[0]}\``,
+    );
+  });
+
+  it("renders an empty fix-pack state", () => {
+    const report = buildAgentReadyReport({
+      requestedUrl: "https://example.com",
+      mode: "fast",
+      generatedAt: new Date("2026-06-13T12:00:00.000Z"),
+      profiles: {
+        mobile: {
+          attemptedRuns: 1,
+          failures: [],
+          runs: [makeLighthouseResult()],
+        },
+        desktop: {
+          attemptedRuns: 1,
+          failures: [],
+          runs: [makeLighthouseResult({ formFactor: "desktop" })],
+        },
+      },
+    });
+    report.prioritizedIssues = [];
+    report.fixPacks = [];
+
+    expect(renderReportMarkdown(report)).toContain(
+      "No agent fix packs were generated.",
+    );
+  });
+
   it("renders llms txt draft with a fence that cannot be closed by draft content", () => {
     const report = buildAgentReadyReport({
       requestedUrl: "https://example.com",
@@ -170,7 +252,7 @@ describe("renderReportMarkdown", () => {
     const markdown = renderReportMarkdown(report);
     const draftBlock = markdown.slice(
       markdown.indexOf("### Generated llms.txt Draft"),
-      markdown.indexOf("\n## Prioritized Issues"),
+      markdown.indexOf("\n## Agent Fix Packs"),
     );
 
     expect(draftBlock.split("\n")).toEqual([

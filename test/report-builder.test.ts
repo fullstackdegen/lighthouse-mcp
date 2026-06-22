@@ -48,6 +48,11 @@ describe("buildAgentReadyReport", () => {
     ).toBe(2500);
     expect(report.profiles.desktop.scores.performance.median).toBe(95);
     expect(report.prioritizedIssues.length).toBeGreaterThan(0);
+    expect(report.fixPacks).toHaveLength(report.prioritizedIssues.length);
+    expect(report.fixPacks[0]?.priority).toBe(1);
+    expect(report.fixPacks[0]?.sourceIssueIds).toEqual([
+      report.prioritizedIssues[0]?.auditId,
+    ]);
     expect(report.siteIntelligence).toBeNull();
     expect(report.environment.generatedAt).toBe("2026-06-13T12:00:00.000Z");
   });
