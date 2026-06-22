@@ -56,4 +56,4 @@ jobs:
 
       - name: Publish package
         if: steps.npm-version.outputs.published == 'false'
-        run: npm publish
+        run: npm publish --access public

@@ -34,8 +34,8 @@ export function validateReleaseSurface({
     "Example Markdown must match the canonical renderer output",
   );
   requireValue(
-    packageJson.name === "agent-audit",
-    "package.json name must be agent-audit",
+    packageJson.name === "@fullstackdegen/agent-audit",
+    "package.json name must be @fullstackdegen/agent-audit",
   );
   requireValue(
     packageJson.bin?.["agent-audit"] === "dist/index.js",

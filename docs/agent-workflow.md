@@ -64,7 +64,7 @@ The MCP response contains:
 Start the MCP server with localhost enabled:
 
 ```bash
-npx -y agent-audit --local
+npx -y @fullstackdegen/agent-audit --local
 ```
 
 Audit the local app:

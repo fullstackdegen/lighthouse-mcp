@@ -13,7 +13,7 @@ describe("release surface validation", () => {
     const exampleJson = minimalReport();
     return {
       packageJson: {
-        name: "agent-audit",
+        name: "@fullstackdegen/agent-audit",
         description: "Turn Lighthouse audits into coding-agent fix packs.",
         bin: { "agent-audit": "dist/index.js" },
         repository: {
@@ -57,7 +57,7 @@ describe("release surface validation", () => {
 
     expect(failures).toEqual(
       expect.arrayContaining([
-        "package.json name must be agent-audit",
+        "package.json name must be @fullstackdegen/agent-audit",
         "package.json must expose the agent-audit binary",
         "package.json description must match the product promise",
         "package.json repository.url must point to fullstackdegen/agent-audit",
@@ -178,11 +178,27 @@ describe("release surface validation", () => {
 
     expect(failures).toEqual(
       expect.arrayContaining([
-        "package.json name must be agent-audit",
+        "package.json name must be @fullstackdegen/agent-audit",
         "package.json must expose the agent-audit binary",
         "package.json repository.url must point to fullstackdegen/agent-audit",
         "package.json homepage must point to fullstackdegen/agent-audit",
         "package.json bugs.url must point to fullstackdegen/agent-audit",
+      ]),
+    );
+  });
+
+  it("rejects the blocked unscoped npm package name", () => {
+    const failures = validateReleaseSurface({
+      ...completeSurface(),
+      packageJson: {
+        ...completeSurface().packageJson,
+        name: "agent-audit",
+      },
+    });
+
+    expect(failures).toEqual(
+      expect.arrayContaining([
+        "package.json name must be @fullstackdegen/agent-audit",
       ]),
     );
   });

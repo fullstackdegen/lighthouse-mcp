@@ -7,7 +7,7 @@ audits, inspects the target page, and returns a coding-agent-ready backlog with
 evidence, implementation steps, and measurable acceptance criteria.
 
 ```bash
-npx -y agent-audit
+npx -y @fullstackdegen/agent-audit
 ```
 
 ![Agent Audit converts raw Lighthouse audits into an agent-ready backlog](docs/assets/agent-audit-overview.svg)
@@ -88,7 +88,7 @@ must inspect the repository before editing.
 Start the MCP server with npm:
 
 ```bash
-npx -y agent-audit
+npx -y @fullstackdegen/agent-audit
 ```
 
 Package metadata and releases live at
@@ -105,7 +105,7 @@ Add a local MCP server:
   "mcpServers": {
     "agent-audit": {
       "command": "npx",
-      "args": ["-y", "agent-audit"]
+      "args": ["-y", "@fullstackdegen/agent-audit"]
     }
   }
 }
@@ -116,19 +116,19 @@ Restart Claude Desktop after saving the configuration.
 ### Claude Code
 
 ```bash
-claude mcp add agent-audit -- npx -y agent-audit
+claude mcp add agent-audit -- npx -y @fullstackdegen/agent-audit
 ```
 
 For local development audits:
 
 ```bash
-claude mcp add agent-audit-local -- npx -y agent-audit --local
+claude mcp add agent-audit-local -- npx -y @fullstackdegen/agent-audit --local
 ```
 
 ### Codex
 
 ```bash
-codex mcp add agent-audit -- npx -y agent-audit
+codex mcp add agent-audit -- npx -y @fullstackdegen/agent-audit
 ```
 
 Or add it to `~/.codex/config.toml`:
@@ -136,7 +136,7 @@ Or add it to `~/.codex/config.toml`:
 ```toml
 [mcp_servers.agent-audit]
 command = "npx"
-args = ["-y", "agent-audit"]
+args = ["-y", "@fullstackdegen/agent-audit"]
 ```
 
 ### VS Code And GitHub Copilot
@@ -148,7 +148,7 @@ Create a workspace or user-level `.mcp.json` file:
   "servers": {
     "agent-audit": {
       "command": "npx",
-      "args": ["-y", "agent-audit"]
+      "args": ["-y", "@fullstackdegen/agent-audit"]
     }
   }
 }
@@ -157,7 +157,7 @@ Create a workspace or user-level `.mcp.json` file:
 Or register it from a terminal:
 
 ```bash
-code --add-mcp '{"name":"agent-audit","command":"npx","args":["-y","agent-audit"]}'
+code --add-mcp '{"name":"agent-audit","command":"npx","args":["-y","@fullstackdegen/agent-audit"]}'
 ```
 
 ### Cursor
@@ -166,7 +166,7 @@ Configure a local stdio MCP server:
 
 - name: `agent-audit`
 - command: `npx`
-- arguments: `-y`, `agent-audit`
+- arguments: `-y`, `@fullstackdegen/agent-audit`
 
 Add `--local` to the arguments when you need localhost audits.
 
@@ -196,7 +196,7 @@ is the right default for hosted agents and shared environments.
 For developer machines, explicitly enable loopback targets:
 
 ```bash
-npx -y agent-audit --local
+npx -y @fullstackdegen/agent-audit --local
 ```
 
 Then audit a local app through your MCP client:
@@ -215,7 +215,7 @@ and cloud metadata addresses remain blocked.
 The environment variable form is also supported:
 
 ```bash
-LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true npx -y agent-audit
+LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true npx -y @fullstackdegen/agent-audit
 ```
 
 ## Coding-Agent Workflow
@@ -321,8 +321,8 @@ npm run validate:release
 npm pack --dry-run --cache /private/tmp/agent-audit-npm-cache
 ```
 
-`npm publish` still requires npm ownership and authentication for
-`agent-audit`.
+`npm publish --access public` still requires npm ownership and authentication for
+`@fullstackdegen/agent-audit`.
 
 ## Contributing
 
