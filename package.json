@@ -1,5 +1,5 @@
 {
-  "name": "agent-audit",
+  "name": "@fullstackdegen/agent-audit",
   "version": "0.3.0",
   "description": "Turn Lighthouse audits into coding-agent fix packs.",
   "type": "module",

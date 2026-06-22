@@ -6,13 +6,13 @@ Audit report to another repository.
 ## MCP Setup
 
 ```bash
-claude mcp add agent-audit -- npx -y agent-audit
+claude mcp add agent-audit -- npx -y @fullstackdegen/agent-audit
 ```
 
 For local development apps:
 
 ```bash
-claude mcp add agent-audit-local -- npx -y agent-audit --local
+claude mcp add agent-audit-local -- npx -y @fullstackdegen/agent-audit --local
 ```
 
 ## How To Use Reports

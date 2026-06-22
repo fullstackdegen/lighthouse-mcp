@@ -47,7 +47,7 @@ release baseline.
 Use localhost mode only on a developer machine:
 
 ```bash
-npx -y agent-audit --local
+npx -y @fullstackdegen/agent-audit --local
 ```
 
 Then audit loopback URLs such as:
