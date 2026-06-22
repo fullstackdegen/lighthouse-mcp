@@ -1,4 +1,5 @@
 import type {
+  AgentFixPack,
   AgentReadyLighthouseReport,
   NumericDistribution,
   PrioritizedIssue,
@@ -67,6 +68,7 @@ export function renderReportMarkdown(
   }
 
   appendSiteIntelligence(lines, report);
+  appendFixPacks(lines, report);
 
   lines.push("", "## Prioritized Issues");
   if (report.prioritizedIssues.length === 0) {
@@ -87,6 +89,53 @@ export function renderReportMarkdown(
   });
 
   return lines.join("\n");
+}
+
+function appendFixPacks(
+  lines: string[],
+  report: AgentReadyLighthouseReport,
+): void {
+  lines.push("", "## Agent Fix Packs");
+
+  if (report.fixPacks.length === 0) {
+    lines.push("", "No agent fix packs were generated.");
+    return;
+  }
+
+  for (const pack of report.fixPacks) {
+    appendFixPack(lines, pack);
+  }
+}
+
+function appendFixPack(lines: string[], pack: AgentFixPack): void {
+  lines.push(
+    "",
+    `### Fix Pack ${pack.priority}: ${inline(pack.goal)}`,
+    "",
+    `- Severity: **${pack.severity}**`,
+    `- Category: ${pack.category}`,
+    `- Affected profiles: ${pack.affectedProfiles.join(", ")}`,
+    `- Source issues: ${pack.sourceIssueIds.map((id) => `\`${inline(id)}\``).join(", ")}`,
+    "- Repository search hints:",
+  );
+
+  for (const hint of pack.repoSearchHints) {
+    lines.push(`  - ${inline(hint)}`);
+  }
+
+  lines.push("- Implementation steps:");
+  for (const step of pack.implementationSteps) {
+    lines.push(`  - ${inline(step)}`);
+  }
+
+  lines.push("- Acceptance criteria:");
+  for (const criterion of pack.acceptanceCriteria) {
+    lines.push(`  - ${inline(criterion)}`);
+  }
+
+  lines.push(
+    `- Verification: rerun this tool in \`${pack.verification.rerunMode}\` mode; expected audit IDs: ${pack.verification.expectedAuditIds.map((id) => `\`${inline(id)}\``).join(", ")}`,
+  );
 }
 
 function appendSiteIntelligence(
