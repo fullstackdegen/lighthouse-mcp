@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 
 Do not disclose suspected vulnerabilities in a public issue. Use
-[GitHub private vulnerability reporting](https://github.com/fullstackdegen/lighthouse-mcp/security/advisories/new).
+[GitHub private vulnerability reporting](https://github.com/fullstackdegen/agent-audit/security/advisories/new).
 Include reproduction steps, affected versions, and the expected security
 impact.
 

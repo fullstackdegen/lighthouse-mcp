@@ -9,8 +9,11 @@
   "files": [
     "dist",
     "docs/assets",
+    "docs/agent-workflow.md",
     "examples",
     "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
     "LICENSE"
   ],
   "scripts": {
@@ -38,13 +41,13 @@
     "codex",
     "cursor"
   ],
-  "homepage": "https://github.com/fullstackdegen/lighthouse-mcp#readme",
+  "homepage": "https://github.com/fullstackdegen/agent-audit#readme",
   "bugs": {
-    "url": "https://github.com/fullstackdegen/lighthouse-mcp/issues"
+    "url": "https://github.com/fullstackdegen/agent-audit/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fullstackdegen/lighthouse-mcp.git"
+    "url": "git+https://github.com/fullstackdegen/agent-audit.git"
   },
   "license": "MIT",
   "engines": {
