@@ -16,16 +16,84 @@ describe("report contract", () => {
   });
 
   it("publishes a strict structured output schema", () => {
-    expect(REPORT_SCHEMA_VERSION).toBe("1.1");
+    expect(REPORT_SCHEMA_VERSION).toBe("1.2");
     expect(lighthouseReportOutputSchema.type).toBe("object");
     expect(lighthouseReportOutputSchema.additionalProperties).toBe(false);
     expect(lighthouseReportOutputSchema.required).toContain("profiles");
     expect(lighthouseReportOutputSchema.required).toContain("prioritizedIssues");
+    expect(lighthouseReportOutputSchema.required).toContain("fixPacks");
     expect(lighthouseReportOutputSchema.required).toContain("siteIntelligence");
     expect(
       lighthouseReportOutputSchema.properties.prioritizedIssues.maxItems,
     ).toBe(10);
     expect(AGENT_INSTRUCTIONS).toHaveLength(9);
+  });
+
+  it("publishes a strict fix pack output schema", () => {
+    const fixPacksSchema = lighthouseReportOutputSchema.properties.fixPacks;
+    const fixPackSchema = fixPacksSchema.items;
+
+    expect(fixPacksSchema.maxItems).toBe(10);
+    expect(fixPackSchema.additionalProperties).toBe(false);
+    expect(fixPackSchema.required).toEqual([
+      "id",
+      "priority",
+      "sourceIssueIds",
+      "goal",
+      "category",
+      "severity",
+      "affectedProfiles",
+      "repoSearchHints",
+      "implementationSteps",
+      "acceptanceCriteria",
+      "verification",
+    ]);
+    expect(fixPackSchema.properties.priority).toEqual({
+      type: "integer",
+      minimum: 1,
+    });
+    expect(fixPackSchema.properties.sourceIssueIds).toEqual({
+      type: "array",
+      minItems: 1,
+      maxItems: 5,
+      items: { type: "string" },
+    });
+    expect(fixPackSchema.properties.category.enum).toEqual([
+      "performance",
+      "accessibility",
+      "best-practices",
+      "seo",
+    ]);
+    expect(fixPackSchema.properties.severity.enum).toEqual([
+      "critical",
+      "high",
+      "medium",
+      "low",
+    ]);
+    expect(fixPackSchema.properties.affectedProfiles).toEqual({
+      type: "array",
+      uniqueItems: true,
+      items: { type: "string", enum: ["mobile", "desktop"] },
+    });
+    expect(fixPackSchema.properties.repoSearchHints.maxItems).toBe(8);
+    expect(fixPackSchema.properties.implementationSteps.minItems).toBe(1);
+    expect(fixPackSchema.properties.implementationSteps.maxItems).toBe(6);
+    expect(fixPackSchema.properties.acceptanceCriteria.minItems).toBe(1);
+    expect(fixPackSchema.properties.acceptanceCriteria.maxItems).toBe(6);
+    expect(fixPackSchema.properties.verification).toEqual({
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rerunMode: { type: "string", enum: ["reliable"] },
+        expectedAuditIds: {
+          type: "array",
+          minItems: 1,
+          maxItems: 5,
+          items: { type: "string" },
+        },
+      },
+      required: ["rerunMode", "expectedAuditIds"],
+    });
   });
 
   it("requires nullable strict site intelligence output", () => {
@@ -88,6 +156,7 @@ describe("report contract", () => {
         desktop: emptyProfile("desktop"),
       },
       prioritizedIssues: [],
+      fixPacks: [],
       siteIntelligence: null,
       agentInstructions: [...AGENT_INSTRUCTIONS],
     } satisfies AgentReadyLighthouseReport;
