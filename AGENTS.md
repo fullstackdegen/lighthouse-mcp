@@ -1,7 +1,10 @@
-# Agent Instructions
+# Agent Audit Instructions
 
 These instructions apply to Codex, Cursor, Claude, and other coding agents
 working in this repository or applying Agent Audit reports.
+
+Agent Audit is published as [`@fullstackdegen/agent-audit`](https://www.npmjs.com/package/@fullstackdegen/agent-audit)
+and maintained at [`fullstackdegen/agent-audit`](https://github.com/fullstackdegen/agent-audit).
 
 ## Core Rules
 
@@ -28,6 +31,16 @@ For each fix pack:
 
 `repoSearchHints` are not file paths. They may be selectors, URLs, snippets, or
 fallback text. Search first, then reason from the codebase.
+
+## What This Tool Covers
+
+Agent Audit reports may include Lighthouse, Core Web Vitals, accessibility,
+technical SEO, structured data, Open Graph, indexability, image, asset,
+`llms.txt`, LLM visibility, and GEO/AI discovery readiness findings.
+
+Do not over-expand the scope. If a report identifies marketing or discovery
+signals, implement only the concrete fix pack unless the user asks for a broader
+SEO, analytics, or content strategy change.
 
 ## Completion Standard
 
