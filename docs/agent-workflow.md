@@ -3,6 +3,10 @@
 Agent Audit turns Lighthouse and bounded page-inspection results into a report
 that coding agents can execute safely.
 
+Package: [`@fullstackdegen/agent-audit`](https://www.npmjs.com/package/@fullstackdegen/agent-audit)
+
+Repository: [`fullstackdegen/agent-audit`](https://github.com/fullstackdegen/agent-audit)
+
 ## Report Anatomy
 
 The MCP response contains:
@@ -40,6 +44,14 @@ The MCP response contains:
 6. Repeat for the next fix pack.
 7. Rerun Agent Audit in `reliable` mode.
 8. Compare medians, ranges, warnings, and acceptance criteria.
+
+## Discovery And SEO/GEO Signals
+
+Agent Audit can surface technical SEO and AI discovery readiness signals, but it
+does not replace a full marketing platform. Treat metadata, Open Graph,
+structured data, indexability, `llms.txt`, and LLM visibility findings as
+implementation tasks only when they appear in `fixPacks` or the user explicitly
+asks for that work.
 
 ## Good Agent Behavior
 
