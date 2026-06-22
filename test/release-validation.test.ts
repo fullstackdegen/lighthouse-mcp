@@ -16,9 +16,11 @@ describe("release surface validation", () => {
         name: "agent-audit",
         description: "Turn Lighthouse audits into coding-agent fix packs.",
         bin: { "agent-audit": "dist/index.js" },
-        repository: { url: "https://github.com/example/lighthouse-mcp.git" },
-        homepage: "https://github.com/example/lighthouse-mcp#readme",
-        bugs: { url: "https://github.com/example/lighthouse-mcp/issues" },
+        repository: {
+          url: "git+https://github.com/fullstackdegen/agent-audit.git",
+        },
+        homepage: "https://github.com/fullstackdegen/agent-audit#readme",
+        bugs: { url: "https://github.com/fullstackdegen/agent-audit/issues" },
         scripts: {
           prepublishOnly:
             "npm test && npm run check && npm run build && npm run validate:release",
@@ -58,9 +60,9 @@ describe("release surface validation", () => {
         "package.json name must be agent-audit",
         "package.json must expose the agent-audit binary",
         "package.json description must match the product promise",
-        "package.json repository.url is required",
-        "package.json homepage is required",
-        "package.json bugs.url is required",
+        "package.json repository.url must point to fullstackdegen/agent-audit",
+        "package.json homepage must point to fullstackdegen/agent-audit",
+        "package.json bugs.url must point to fullstackdegen/agent-audit",
         "README must contain the product promise",
         "README must not contain stale Lighthouse MCP branding",
         "CONTRIBUTING must not reference the obsolete 20-issue limit",
@@ -162,9 +164,11 @@ describe("release surface validation", () => {
         name: "mcp-server-lighthouse",
         description: "Turn Lighthouse audits into coding-agent fix packs.",
         bin: { "mcp-server-lighthouse": "dist/index.js" },
-        repository: { url: "https://github.com/example/lighthouse-mcp.git" },
-        homepage: "https://github.com/example/lighthouse-mcp#readme",
-        bugs: { url: "https://github.com/example/lighthouse-mcp/issues" },
+        repository: {
+          url: "git+https://github.com/fullstackdegen/lighthouse-mcp.git",
+        },
+        homepage: "https://github.com/fullstackdegen/lighthouse-mcp#readme",
+        bugs: { url: "https://github.com/fullstackdegen/lighthouse-mcp/issues" },
         scripts: {
           prepublishOnly:
             "npm test && npm run check && npm run build && npm run validate:release",
@@ -176,6 +180,9 @@ describe("release surface validation", () => {
       expect.arrayContaining([
         "package.json name must be agent-audit",
         "package.json must expose the agent-audit binary",
+        "package.json repository.url must point to fullstackdegen/agent-audit",
+        "package.json homepage must point to fullstackdegen/agent-audit",
+        "package.json bugs.url must point to fullstackdegen/agent-audit",
       ]),
     );
   });

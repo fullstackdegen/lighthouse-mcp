@@ -1,5 +1,11 @@
 const PREPUBLISH_COMMAND =
   "npm test && npm run check && npm run build && npm run validate:release";
+const CANONICAL_REPOSITORY_URL =
+  "git+https://github.com/fullstackdegen/agent-audit.git";
+const CANONICAL_HOMEPAGE_URL =
+  "https://github.com/fullstackdegen/agent-audit#readme";
+const CANONICAL_BUGS_URL =
+  "https://github.com/fullstackdegen/agent-audit/issues";
 
 const { lighthouseReportOutputSchema, renderReportMarkdown } =
   await loadReportContracts();
@@ -40,11 +46,17 @@ export function validateReleaseSurface({
     "package.json description must match the product promise",
   );
   requireValue(
-    packageJson.repository?.url,
-    "package.json repository.url is required",
+    packageJson.repository?.url === CANONICAL_REPOSITORY_URL,
+    "package.json repository.url must point to fullstackdegen/agent-audit",
   );
-  requireValue(packageJson.homepage, "package.json homepage is required");
-  requireValue(packageJson.bugs?.url, "package.json bugs.url is required");
+  requireValue(
+    packageJson.homepage === CANONICAL_HOMEPAGE_URL,
+    "package.json homepage must point to fullstackdegen/agent-audit",
+  );
+  requireValue(
+    packageJson.bugs?.url === CANONICAL_BUGS_URL,
+    "package.json bugs.url must point to fullstackdegen/agent-audit",
+  );
   requireValue(
     packageJson.scripts?.prepublishOnly === PREPUBLISH_COMMAND,
     "prepublishOnly must run every release gate",

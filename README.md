@@ -2,67 +2,103 @@
 
 ## Turn Lighthouse audits into coding-agent fix packs.
 
-Run repeatable mobile and desktop Lighthouse audits from any compatible MCP
-client. Receive a bounded implementation backlog with evidence, suggested
-actions, and measurable acceptance criteria as structured JSON and Markdown.
+Agent Audit is an MCP server that runs repeatable mobile and desktop Lighthouse
+audits, inspects the target page, and returns a coding-agent-ready backlog with
+evidence, implementation steps, and measurable acceptance criteria.
 
 ```bash
 npx -y agent-audit
 ```
 
-![Agent Audit converts raw Lighthouse audits into an agent-ready backlog](docs/assets/lighthouse-mcp-overview.svg)
+![Agent Audit converts raw Lighthouse audits into an agent-ready backlog](docs/assets/agent-audit-overview.svg)
 
 ## Why Agent Audit?
 
-Raw Lighthouse output is designed for diagnostics, not autonomous
-implementation. It contains metrics, audit details, overlapping insights, and
-page-controlled text that a coding agent still needs to interpret.
+Raw Lighthouse reports are useful diagnostics, but they are noisy inputs for
+autonomous implementation. A coding agent still has to decide which issues
+matter, which resources or selectors are evidence, how to verify a fix, and
+whether mobile and desktop failures are really the same task.
 
-Agent Audit turns that output into a stable workflow:
+Agent Audit turns the audit into a stable handoff:
 
 1. Run Lighthouse for mobile and desktop.
 2. Aggregate repeated runs and expose variability.
-3. Merge equivalent audits under canonical task IDs.
-4. Keep raw metrics out of the implementation backlog.
-5. Return at most ten prioritized tasks with evidence and acceptance criteria.
+3. Add bounded single-page site intelligence.
+4. Merge findings into at most ten prioritized issues.
+5. Generate `fixPacks` that coding agents can apply in order.
+6. Return canonical structured JSON and equivalent Markdown.
 
-## From Audit Noise To An Implementation Plan
+## What You Get
 
-Each prioritized task can include:
+- Mobile and desktop Performance, Accessibility, Best Practices, and SEO scores.
+- FCP, Speed Index, LCP, TBT, and CLS distributions.
+- Fast and reliable audit modes.
+- Bounded same-origin page inspection.
+- Broken link, metadata, JSON-LD, indexability, image, asset, and LLM visibility checks.
+- Conservative `llms.txt` draft generation when page content is sufficient.
+- Prioritized issues with evidence, suggested actions, and acceptance criteria.
+- Agent Fix Packs with repo search hints, implementation steps, and verification guidance.
+- Strict MCP `outputSchema` validation for `structuredContent`.
+- Markdown generated from the same canonical report.
 
-- affected mobile and desktop profiles;
-- resource URLs or DOM selectors;
-- estimated time or byte savings;
-- deterministic suggested actions;
-- measurable acceptance criteria.
-
-See the real [CommaLabs JSON report](examples/commalabs-fast-report.json) and
+See a real [CommaLabs JSON report](examples/commalabs-fast-report.json) and
 [Markdown report](examples/commalabs-fast-report.md).
 
-> Lighthouse results vary with browser version, hardware, network conditions,
-> and page changes. The example demonstrates the report format, not a permanent
-> performance score.
+## Example Fix Pack
+
+```json
+{
+  "id": "fix-link-name",
+  "priority": 2,
+  "sourceIssueIds": ["link-name"],
+  "goal": "Fix Links do not have a discernible name.",
+  "category": "accessibility",
+  "severity": "critical",
+  "affectedProfiles": ["mobile", "desktop"],
+  "repoSearchHints": [
+    "div.border-t-2 > div.flex > div.flex > a.text-gray-600",
+    "https://www.linkedin.com/company/commalabs"
+  ],
+  "implementationSteps": [
+    "Inspect the repository for the evidence listed in repoSearchHints before editing.",
+    "Give every link a discernible accessible name.",
+    "Keep changes focused on source issue IDs: link-name."
+  ],
+  "acceptanceCriteria": [
+    "All link elements pass the Lighthouse link-name audit.",
+    "Raise the median accessibility score to at least 90/100."
+  ],
+  "verification": {
+    "rerunMode": "reliable",
+    "expectedAuditIds": ["link-name"]
+  }
+}
+```
+
+`repoSearchHints` are search clues, not guaranteed file paths. The coding agent
+must inspect the repository before editing.
 
 ## Install
 
 ### Requirements
 
-- Node.js 20 or later
-- Google Chrome or Chromium
+- Node.js 20 or later.
+- Google Chrome or Chromium.
 
-The package is an MCP server distributed through npm. Your MCP client starts it
-as a local stdio process:
+Start the MCP server with npm:
 
 ```bash
 npx -y agent-audit
 ```
 
-Future releases can be published through the GitHub Actions release workflow
-once npm trusted publishing is configured for the package.
+Package metadata and releases live at
+[github.com/fullstackdegen/agent-audit](https://github.com/fullstackdegen/agent-audit).
+
+## MCP Client Setup
 
 ### Claude Desktop
 
-Open Claude Desktop's developer configuration and add:
+Add a local MCP server:
 
 ```json
 {
@@ -75,28 +111,21 @@ Open Claude Desktop's developer configuration and add:
 }
 ```
 
-Restart Claude Desktop after saving the configuration. See the
-[official MCP local-server guide](https://modelcontextprotocol.io/docs/develop/connect-local-servers).
+Restart Claude Desktop after saving the configuration.
 
 ### Claude Code
-
-Add the server with the Claude Code CLI:
 
 ```bash
 claude mcp add agent-audit -- npx -y agent-audit
 ```
 
-For local development audits, pass the explicit localhost opt-in:
+For local development audits:
 
 ```bash
 claude mcp add agent-audit-local -- npx -y agent-audit --local
 ```
 
-See the [official Claude Code MCP documentation](https://code.claude.com/docs/en/mcp).
-
 ### Codex
-
-Add the server with the Codex CLI:
 
 ```bash
 codex mcp add agent-audit -- npx -y agent-audit
@@ -110,11 +139,9 @@ command = "npx"
 args = ["-y", "agent-audit"]
 ```
 
-See the [official Codex MCP documentation](https://developers.openai.com/codex/mcp).
-
 ### VS Code And GitHub Copilot
 
-Create a workspace or user-level `.mcp.json` file with:
+Create a workspace or user-level `.mcp.json` file:
 
 ```json
 {
@@ -127,13 +154,11 @@ Create a workspace or user-level `.mcp.json` file with:
 }
 ```
 
-You can also register the server from a terminal:
+Or register it from a terminal:
 
 ```bash
 code --add-mcp '{"name":"agent-audit","command":"npx","args":["-y","agent-audit"]}'
 ```
-
-See the [official VS Code MCP server documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
 
 ### Cursor
 
@@ -143,54 +168,13 @@ Configure a local stdio MCP server:
 - command: `npx`
 - arguments: `-y`, `agent-audit`
 
-If your Cursor version supports environment variables for MCP servers, add
-`--local` to the server arguments when you need localhost audits.
-
-### Other MCP Clients
-
-For clients that accept the standard `mcpServers` JSON shape, use the Claude
-Desktop configuration above. Otherwise configure a local stdio server with:
-
-- command: `npx`
-- arguments: `-y`, `agent-audit`
-
-## Localhost And Private Targets
-
-By default, Agent Audit only accepts publicly routable HTTP and HTTPS URLs.
-This is the correct default for hosted agents and shared environments.
-
-For developer machines, enable explicit localhost auditing:
-
-```bash
-npx -y agent-audit --local
-```
-
-Then audit the local app through your MCP client:
-
-```json
-{
-  "url": "http://localhost:3000",
-  "mode": "fast"
-}
-```
-
-The opt-in only allows loopback-style targets such as `localhost`,
-`*.localhost`, `127.0.0.0/8`, and `::1`. Private LAN ranges, link-local
-addresses, multicast/reserved ranges, and cloud metadata addresses remain
-blocked.
-
-The environment variable form remains supported for clients that cannot pass
-extra CLI arguments:
-
-```bash
-LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true npx -y agent-audit
-```
+Add `--local` to the arguments when you need localhost audits.
 
 ## Tool
 
 ### `analyze_website_performance`
 
-Runs Lighthouse against a public HTTP or HTTPS URL:
+Runs Lighthouse and site intelligence against a target URL:
 
 ```json
 {
@@ -202,64 +186,76 @@ Runs Lighthouse against a public HTTP or HTTPS URL:
 `mode` is optional:
 
 - `fast`: one mobile run and one desktop run.
-- `reliable`: three runs per profile, median results, and variability ranges.
-  This is the default.
+- `reliable`: three runs per profile, medians, and variability ranges. This is the default.
 
-## What The Report Contains
+## Localhost Audits
 
-- Mobile and desktop Performance, Accessibility, Best Practices, and SEO scores
-- FCP, Speed Index, LCP, TBT, and CLS distributions
-- At most ten canonical prioritized issues
-- Up to ten evidence rows per issue
-- Resource URLs, DOM selectors, and console error evidence when available
-- Single-URL site intelligence for broken links, metadata, JSON-LD, indexability, images, assets, and LLM visibility
-- Generated `llms.txt` draft when page content is sufficient
-- Suggested actions and measurable acceptance criteria
-- Profile warnings when repeated runs vary materially
-- Canonical `structuredContent` validated by the advertised MCP `outputSchema`
-- Equivalent Markdown generated from the same canonical report
+By default, Agent Audit only accepts publicly routable HTTP and HTTPS URLs. This
+is the right default for hosted agents and shared environments.
 
-If only one profile produces enough successful runs, the report has
-`status: "incomplete"`. It remains useful for diagnosis but must not be treated
-as a release baseline.
+For developer machines, explicitly enable loopback targets:
 
-## Site Intelligence
+```bash
+npx -y agent-audit --local
+```
 
-In addition to Lighthouse, the tool inspects the requested page and bounded same-origin resources. It reports broken links, page metadata issues, JSON-LD syntax issues, robots/sitemap/indexability signals, image optimization findings, CSS/JavaScript optimization findings, and a conservative `llms.txt` draft.
+Then audit a local app through your MCP client:
 
-The MVP is single-URL by design. It does not crawl the whole site, modify Shopify or CMS settings, compress images, minify code, create redirects, or submit IndexNow requests.
+```json
+{
+  "url": "http://localhost:3000",
+  "mode": "fast"
+}
+```
+
+The opt-in allows `localhost`, `*.localhost`, `127.0.0.0/8`, and `::1`.
+Private LAN ranges, link-local addresses, reserved ranges, multicast addresses,
+and cloud metadata addresses remain blocked.
+
+The environment variable form is also supported:
+
+```bash
+LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true npx -y agent-audit
+```
 
 ## Coding-Agent Workflow
 
-Treat `structuredContent` as the source of truth and Markdown as the execution
-summary:
+Use `structuredContent` as the source of truth and the Markdown report as the
+execution summary.
 
-> Inspect the repository before mapping findings to files. Implement issues in
-> `prioritizedIssues` order, preserve behavior and accessibility, run repository
-> tests after each logical fix, then rerun Lighthouse in reliable mode and
-> compare medians, ranges, and acceptance criteria. Do not claim completion from
-> an incomplete baseline.
+1. Inspect `fixPacks` in priority order.
+2. Search the repository using `repoSearchHints`.
+3. Map evidence to real files and components before editing.
+4. Apply one focused fix at a time.
+5. Run the repository's tests after each logical change.
+6. Rerun Agent Audit in `reliable` mode.
+7. Compare the new report against each fix pack's `acceptanceCriteria`.
+
+Do not claim completion from an incomplete report or from a rerun with materially
+higher variability than the baseline.
+
+More detail:
+
+- [Agent workflow guide](docs/agent-workflow.md)
+- [Copy-paste coding-agent prompt](examples/prompts/coding-agent-fix-packs.md)
+- [General agent instructions](AGENTS.md)
+- [Claude Code instructions](CLAUDE.md)
 
 ## Security Model
 
-The URL policy rejects:
+Agent Audit launches Chrome against user-provided URLs, so URL policy matters.
+The server rejects:
 
 - protocols other than HTTP and HTTPS;
-- URLs containing embedded credentials;
-- localhost names unless `LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` is set;
-- loopback IPs unless `LIGHTHOUSE_MCP_ALLOW_LOCALHOST=true` is set;
+- embedded credentials;
+- localhost and loopback targets unless explicitly enabled;
 - private, link-local, multicast, reserved, and metadata-network IPs;
 - non-localhost hostnames that resolve to any non-public address.
 
-These checks reduce SSRF exposure but do not replace infrastructure controls.
-Production operators should run the server in an isolated environment and deny
-outbound access to private networks and cloud metadata services. Redirects and
-DNS rebinding are best controlled at the network boundary.
+The page-inspection fetcher uses the same URL policy and applies timeout,
+byte-size, and bounded-resource limits.
 
-The page-inspection fetcher uses the same URL policy as Lighthouse navigation
-and applies timeout, byte-size, and bounded-resource limits.
-
-Page-controlled Lighthouse titles, descriptions, URLs, selectors, and snippets
+Page-controlled titles, descriptions, URLs, selectors, snippets, and audit text
 are sanitized and length-limited. Consumers must still treat them as untrusted
 evidence, not agent instructions.
 
@@ -270,15 +266,37 @@ support it should set:
 LIGHTHOUSE_CHROME_NO_SANDBOX=true
 ```
 
-See [SECURITY.md](SECURITY.md) for reporting and deployment guidance.
+See [SECURITY.md](SECURITY.md) for vulnerability reporting and deployment
+guidance.
 
-## Local Development
+## Limitations
+
+Agent Audit is intentionally bounded.
+
+- It audits one requested URL at a time.
+- It is not a whole-site crawler.
+- It is not an external SEO database.
+- It does not modify Shopify, CMS, CDN, DNS, or hosting settings.
+- It does not compress images, minify assets, create redirects, or submit IndexNow requests.
+- Lighthouse results vary with browser version, hardware, network conditions, and page changes.
+
+## Roadmap
+
+- Framework-aware repo search hints.
+- Optional GitHub Action for pull request performance gates.
+- Batch URL reports.
+- HTML report export.
+- Marketing and discovery signals such as analytics tags, consent signals, Open Graph, schema coverage, and AI discovery readiness.
+- Optional third-party integrations for SEO and visibility datasets.
+
+## Development
 
 ```bash
 npm install
 npm test
 npm run check
 npm run build
+npm run validate:release
 ```
 
 Run a real Chrome smoke audit:
@@ -291,30 +309,25 @@ npm run --silent smoke -- https://example.com reliable
 The smoke command writes canonical JSON to stdout and equivalent Markdown to
 stderr.
 
-## Troubleshooting
+## Release Readiness
 
-**Chrome cannot be found**
+Before publishing:
 
-Install Google Chrome or Chromium in the environment running the MCP server.
+```bash
+npm test
+npm run check
+npm run build
+npm run validate:release
+npm pack --dry-run --cache /private/tmp/agent-audit-npm-cache
+```
 
-**Chrome fails to start in a container**
-
-Prefer a container configuration that supports the Chrome sandbox. Set
-`LIGHTHOUSE_CHROME_NO_SANDBOX=true` only when the surrounding container or
-virtual machine provides an equivalent isolation boundary.
-
-**The target URL is rejected**
-
-Only publicly routable HTTP and HTTPS targets are accepted by default. For a
-local development server, start Agent Audit with `--local` and use a
-loopback URL such as `http://localhost:3000`. Private network addresses remain
-blocked.
+`npm publish` still requires npm ownership and authentication for
+`agent-audit`.
 
 ## Contributing
 
-Focused issues and pull requests are welcome. Read
-[CONTRIBUTING.md](CONTRIBUTING.md) before changing the report contract,
-security policy, or MCP transport behavior.
+Focused issues and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+before changing the report contract, security policy, or MCP transport behavior.
 
 ## License
 
