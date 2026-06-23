@@ -3,6 +3,8 @@
 **Lighthouse-powered MCP server for AI coding agents, Core Web Vitals,
 technical SEO, accessibility, and GEO/LLM visibility audits.**
 
+🔗 **[NPM Package](https://www.npmjs.com/package/@fullstackdegen/agent-audit)**
+
 Agent Audit turns Google Lighthouse and bounded page-inspection results into
 structured fix packs that coding agents can actually execute. It gives Claude
 Code, Codex, Cursor, GitHub Copilot, and other MCP clients a prioritized,
