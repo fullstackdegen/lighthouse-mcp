@@ -1,67 +1,35 @@
-# Anthropic MCP Repo — PR Submission Guide
+# MCP Official Registry — Yayınlama Kılavuzu
 
-## Hedef Repo
+Doğru hedef: `modelcontextprotocol/registry` (PR değil, CLI ile publish)
+`modelcontextprotocol/servers` reposu yeni server kabul etmiyor.
 
-`modelcontextprotocol/servers` (resmi MCP server listesi)
+## Ben Zaten Yaptıklarım
 
-## PR Adımları
+- `package.json`'a `"mcpName": "io.github.fullstackdegen/agent-audit"` eklendi ✅
+- `server.json` oluşturuldu ✅
 
-1. https://github.com/modelcontextprotocol/servers adresine git
-2. Repoyu fork et
-3. Aşağıdaki değişikliği yap
-4. PR aç
+## Senin Yapman Gerekenler (3 komut)
 
-## README.md'ye Eklenecek İçerik
+```bash
+# 1. mcp-publisher'ı indir (macOS/Linux)
+curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s)_$(uname -m).tar.gz" | tar xz
+sudo mv mcp-publisher /usr/local/bin/
 
-`README.md` içindeki **Community Servers** bölümüne alfabetik sıraya göre ekle:
+# 2. GitHub hesabınla login ol
+mcp-publisher login github
 
-```markdown
-- **[Agent Audit](https://github.com/fullstackdegen/agent-audit)** - Lighthouse-powered audits that turn performance, accessibility, SEO, and LLM-visibility findings into structured fix packs for coding agents (Claude Code, Cursor, Copilot, Codex).
+# 3. Yayınla
+mcp-publisher publish
 ```
 
-## PR Başlığı
+## Doğrulama
 
-```
-feat: add Agent Audit — Lighthouse MCP server for coding-agent fix packs
-```
-
-## PR Açıklaması
-
-```markdown
-## Summary
-
-Adds **Agent Audit** (`@fullstackdegen/agent-audit`) to the Community Servers list.
-
-**What it does:** Runs Google Lighthouse (mobile + desktop) and bounded page-inspection
-against a target URL, then returns structured `fixPacks` with repo search hints,
-implementation steps, and measurable acceptance criteria — so coding agents can
-execute fixes autonomously rather than interpreting raw audit output.
-
-**Audits covered:**
-- Performance (Core Web Vitals: FCP, LCP, CLS, TBT)
-- Accessibility
-- Technical SEO (canonical, robots, metadata, JSON-LD, Open Graph)
-- LLM visibility & `llms.txt` readiness
-- Broken links, images, assets
-
-**MCP clients supported:** Claude Code, Claude Desktop, Cursor, Codex, VS Code / GitHub Copilot
-
-**Install:**
-\```bash
-npx -y @fullstackdegen/agent-audit
-\```
-
-**Links:**
-- npm: https://www.npmjs.com/package/@fullstackdegen/agent-audit
-- GitHub: https://github.com/fullstackdegen/agent-audit
-- License: MIT
+```bash
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.fullstackdegen/agent-audit"
 ```
 
----
+Çıktıda paketin göründüğünü gördüğünde tamamdır.
 
-## Alternatif: Anthropic Docs / Claude Integrations
+## Önemli Not
 
-Eğer `modelcontextprotocol/servers` dışında Anthropic'in kendi dokümantasyonuna
-eklenmek istersen, https://docs.anthropic.com/en/docs/claude-code/mcp sayfasında
-"community tools" bölümü için aynı içeriği kullanabilirsin — bunun için
-Anthropic'e doğrudan e-posta veya Twitter DM ile ulaşmak gerekiyor.
+Yeni versiyon çıkardığında `server.json` ve `package.json`'daki `version`'ı da güncellemeyi unutma.

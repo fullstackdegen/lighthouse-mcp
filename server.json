@@ -1,0 +1,11 @@
+{
+  "name": "io.github.fullstackdegen/agent-audit",
+  "version": "0.3.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@fullstackdegen/agent-audit",
+      "version": "0.3.0"
+    }
+  ]
+}

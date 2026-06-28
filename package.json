@@ -1,6 +1,7 @@
 {
   "name": "@fullstackdegen/agent-audit",
   "version": "0.3.0",
+  "mcpName": "io.github.fullstackdegen/agent-audit",
   "description": "Turn Lighthouse audits into coding-agent fix packs.",
   "type": "module",
   "bin": {
