@@ -7,20 +7,15 @@
   <meta name="description" content="Turn Lighthouse audits into coding-agent fix packs. MCP server for Claude Code, Cursor, Copilot, and Codex. Covers performance, accessibility, SEO, and LLM visibility.">
   <link rel="canonical" href="https://fullstackdegen.github.io/agent-audit/">
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://fullstackdegen.github.io/agent-audit/">
   <meta property="og:title" content="Agent Audit — Lighthouse MCP Server for AI Coding Agents">
   <meta property="og:description" content="Turn Lighthouse audits into coding-agent fix packs. Works with Claude Code, Cursor, Copilot, and Codex.">
-  <meta property="og:image" content="https://fullstackdegen.github.io/agent-audit/og-image.png">
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Agent Audit — Lighthouse MCP Server for AI Coding Agents">
   <meta name="twitter:description" content="Turn Lighthouse audits into coding-agent fix packs. Works with Claude Code, Cursor, Copilot, and Codex.">
-  <meta name="twitter:image" content="https://fullstackdegen.github.io/agent-audit/og-image.png">
 
-  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,271 +28,389 @@
     "downloadUrl": "https://www.npmjs.com/package/@fullstackdegen/agent-audit",
     "softwareVersion": "0.3.1",
     "license": "https://opensource.org/licenses/MIT",
-    "codeRepository": "https://github.com/fullstackdegen/agent-audit",
-    "keywords": "mcp, lighthouse, core web vitals, accessibility, seo, ai agent, coding agent",
-    "author": {
-      "@type": "Organization",
-      "name": "fullstackdegen",
-      "url": "https://github.com/fullstackdegen"
-    }
+    "codeRepository": "https://github.com/fullstackdegen/agent-audit"
   }
   </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --green: #3fb950;
-      --code-bg: #1f2937;
+      --bg: #09090b;
+      --surface: #111113;
+      --surface2: #18181b;
+      --border: #27272a;
+      --text: #fafafa;
+      --muted: #71717a;
+      --subtle: #3f3f46;
+      --accent: #60a5fa;
+      --green: #4ade80;
+      --yellow: #facc15;
+      --mono: "Berkeley Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
     }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
-    header {
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
-      gap: 1rem;
-    }
-    header .logo { font-weight: 700; font-size: 1.1rem; }
-    header nav { margin-left: auto; display: flex; gap: 1.5rem; font-size: 0.9rem; }
-
-    .hero {
-      max-width: 760px;
-      margin: 5rem auto 3rem;
       padding: 0 2rem;
-      text-align: center;
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(12px);
+      gap: 2rem;
     }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.8rem;
+    .nav-brand {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .nav-version {
+      font-size: 0.75rem;
       color: var(--muted);
+      font-family: var(--mono);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       margin-bottom: 1.5rem;
     }
-    .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
     h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-    }
-    h1 span { color: var(--accent); }
-    .tagline {
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 2rem;
-    }
-
-    .install {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.5rem;
-      font-family: "SF Mono", "Fira Code", monospace;
-      font-size: 0.95rem;
-      text-align: left;
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
-      position: relative;
-    }
-    .install .prompt { color: var(--muted); user-select: none; }
-    .install .cmd { color: var(--green); }
-
-    .clients {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 4rem;
-    }
-    .clients span {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.3rem 0.75rem;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .section {
-      max-width: 760px;
-      margin: 0 auto 4rem;
-      padding: 0 2rem;
-    }
-    h2 {
-      font-size: 1.4rem;
+      font-size: clamp(2rem, 5vw, 2.75rem);
       font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
       margin-bottom: 1.25rem;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
     }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .card .icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
-    .card p { font-size: 0.85rem; color: var(--muted); }
 
-    .setup-tabs { display: flex; flex-direction: column; gap: 1rem; }
-    .tab {
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .install-cmd {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.875rem;
+    }
+    .install-cmd .dollar { color: var(--subtle); user-select: none; }
+    .install-cmd .cmd { color: var(--green); }
+
+    .hero-link {
+      font-size: 0.875rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .hero-link:hover { color: var(--text); }
+
+    .hero-clients {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* DIVIDER */
+    .divider {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* SECTION */
+    section {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    p { color: var(--muted); margin-bottom: 1rem; line-height: 1.75; }
+
+    /* TERMINAL WINDOW */
+    .window {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
+      margin: 2rem 0;
     }
-    .tab-label {
-      padding: 0.75rem 1.25rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
-    .tab pre {
-      padding: 1rem 1.25rem;
-      font-family: "SF Mono", "Fira Code", monospace;
-      font-size: 0.85rem;
-      color: var(--green);
-      overflow-x: auto;
-    }
-
-    .links {
+    .window-bar {
       display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      transition: border-color 0.15s;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
     }
-    .btn:hover { border-color: var(--accent); text-decoration: none; }
-    .btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
-    .btn.primary:hover { opacity: 0.9; }
+    .window-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .window-title {
+      margin-left: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .window-body {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+    .t-muted { color: var(--muted); }
+    .t-green { color: var(--green); }
+    .t-yellow { color: var(--yellow); }
+    .t-blue { color: var(--accent); }
+    .t-white { color: var(--text); }
 
+    /* CHECKS LIST */
+    .checks {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 2rem;
+      margin: 1.5rem 0;
+    }
+    .checks li {
+      font-size: 0.875rem;
+      color: var(--muted);
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .checks li::before {
+      content: "—";
+      color: var(--subtle);
+      flex-shrink: 0;
+    }
+
+    /* SETUP */
+    .setup-block {
+      margin-bottom: 1.25rem;
+    }
+    .setup-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      font-family: var(--mono);
+    }
+    pre {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--green);
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
     footer {
       border-top: 1px solid var(--border);
       padding: 2rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 560px) {
+      .checks { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <span class="logo">Agent Audit</span>
-  <nav>
+<nav>
+  <span class="nav-brand">Agent Audit</span>
+  <span class="nav-version">v0.3.1</span>
+  <div class="nav-links">
     <a href="https://github.com/fullstackdegen/agent-audit">GitHub</a>
     <a href="https://www.npmjs.com/package/@fullstackdegen/agent-audit">npm</a>
-    <a href="https://github.com/fullstackdegen/agent-audit#readme">Docs</a>
-  </nav>
-</header>
+    <a href="https://github.com/fullstackdegen/agent-audit/blob/main/examples/commalabs-fast-report.md">Example report</a>
+  </div>
+</nav>
 
-<main>
-  <section class="hero">
-    <div class="badge">
-      <span class="dot"></span>
-      MCP Server · v0.3.1 · MIT
+<div class="hero">
+  <p class="hero-label">MCP Server · Open Source · MIT</p>
+  <h1>Lighthouse audits your agent can actually act on</h1>
+  <p class="hero-sub">
+    Raw Lighthouse output tells you what's wrong. Agent Audit tells your coding agent
+    which file to open, what to change, and how to verify the fix — as a structured,
+    prioritized backlog.
+  </p>
+  <div class="hero-actions">
+    <div class="install-cmd">
+      <span class="dollar">$</span>
+      <span class="cmd">npx -y @fullstackdegen/agent-audit</span>
     </div>
-    <h1>Turn Lighthouse into<br><span>agent-ready fix packs</span></h1>
-    <p class="tagline">
-      Agent Audit runs Lighthouse and converts raw audit output into structured
-      fix packs your AI coding agent can actually execute.
-    </p>
-    <div class="install">
-      <span class="prompt">$</span>
-      <span class="cmd"> npx -y @fullstackdegen/agent-audit</span>
-    </div>
-    <div class="clients">
-      <span>Claude Code</span>
-      <span>Claude Desktop</span>
-      <span>Cursor</span>
-      <span>GitHub Copilot</span>
-      <span>Codex</span>
-    </div>
-  </section>
+    <a class="hero-link" href="https://github.com/fullstackdegen/agent-audit">
+      View on GitHub →
+    </a>
+  </div>
+  <p class="hero-clients">Works with Claude Code, Cursor, GitHub Copilot, and Codex.</p>
+</div>
 
-  <section class="section">
-    <h2>What it audits</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="icon">⚡</div>
-        <h3>Performance</h3>
-        <p>FCP, LCP, CLS, TBT — mobile &amp; desktop, 3-run medians</p>
-      </div>
-      <div class="card">
-        <div class="icon">♿</div>
-        <h3>Accessibility</h3>
-        <p>WCAG issues with failing element selectors</p>
-      </div>
-      <div class="card">
-        <div class="icon">🔎</div>
-        <h3>Technical SEO</h3>
-        <p>Canonical, robots, metadata, JSON-LD, Open Graph</p>
-      </div>
-      <div class="card">
-        <div class="icon">🤖</div>
-        <h3>LLM Visibility</h3>
-        <p>AI crawler signals, llms.txt readiness, GEO</p>
-      </div>
-      <div class="card">
-        <div class="icon">🔗</div>
-        <h3>Links &amp; Images</h3>
-        <p>Broken links, missing alt text, image optimization</p>
-      </div>
-      <div class="card">
-        <div class="icon">📦</div>
-        <h3>Fix Packs</h3>
-        <p>Repo search hints, steps, and acceptance criteria</p>
-      </div>
-    </div>
-  </section>
+<section>
+  <p class="section-label">How it works</p>
+  <h2>From score to fix pack</h2>
+  <p>
+    A Lighthouse score of 67 doesn't tell your agent which component to edit.
+    Agent Audit converts each failing audit into a fix pack with the evidence,
+    the search hints, and the acceptance criteria built in.
+  </p>
 
-  <section class="section">
-    <h2>Setup</h2>
-    <div class="setup-tabs">
-      <div class="tab">
-        <div class="tab-label">Claude Code</div>
-        <pre>claude mcp add agent-audit -- npx -y @fullstackdegen/agent-audit</pre>
-      </div>
-      <div class="tab">
-        <div class="tab-label">Claude Desktop / Cursor / Copilot (.mcp.json)</div>
-        <pre>{
+  <div class="window">
+    <div class="window-bar">
+      <div class="window-dot"></div>
+      <div class="window-dot"></div>
+      <div class="window-dot"></div>
+      <span class="window-title">fix pack · accessibility · priority 2</span>
+    </div>
+    <div class="window-body">
+<span class="t-muted">{</span><br>
+&nbsp;&nbsp;<span class="t-blue">"id"</span><span class="t-muted">:</span> <span class="t-green">"fix-link-name"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;<span class="t-blue">"severity"</span><span class="t-muted">:</span> <span class="t-yellow">"critical"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;<span class="t-blue">"goal"</span><span class="t-muted">:</span> <span class="t-green">"Fix links that do not have a discernible name"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;<span class="t-blue">"repoSearchHints"</span><span class="t-muted">: [</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"div.border-t-2 &gt; div.flex &gt; a.text-gray-600"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"https://www.linkedin.com/company/commalabs"</span><br>
+&nbsp;&nbsp;<span class="t-muted">],</span><br>
+&nbsp;&nbsp;<span class="t-blue">"implementationSteps"</span><span class="t-muted">: [</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"Search repo using repoSearchHints before editing"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"Add aria-label or visible text to each bare link"</span><br>
+&nbsp;&nbsp;<span class="t-muted">],</span><br>
+&nbsp;&nbsp;<span class="t-blue">"acceptanceCriteria"</span><span class="t-muted">: [</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"All links pass the Lighthouse link-name audit"</span><span class="t-muted">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">"Median accessibility score ≥ 90"</span><br>
+&nbsp;&nbsp;<span class="t-muted">]</span><br>
+<span class="t-muted">}</span>
+    </div>
+  </div>
+
+  <p>
+    The CSS selectors in <code style="font-family:var(--mono);font-size:0.82rem;color:var(--accent)">repoSearchHints</code> come
+    directly from Lighthouse's failing audit evidence — your agent uses them to locate
+    the component without guessing.
+  </p>
+</section>
+
+<section>
+  <p class="section-label">Coverage</p>
+  <h2>What gets audited</h2>
+  <p>
+    Each run covers mobile and desktop profiles. Reliable mode runs three times per
+    profile and returns median scores with variability ranges.
+  </p>
+  <ul class="checks">
+    <li>FCP, LCP, CLS, TBT, Speed Index</li>
+    <li>Canonical tags and robots signals</li>
+    <li>Accessibility — WCAG issues with selectors</li>
+    <li>JSON-LD structured data</li>
+    <li>Broken links and missing link names</li>
+    <li>Open Graph tags</li>
+    <li>Image alt text and sizing</li>
+    <li>LLM crawler visibility</li>
+    <li>Indexability signals</li>
+    <li>llms.txt readiness</li>
+  </ul>
+</section>
+
+<section>
+  <p class="section-label">Setup</p>
+  <h2>Add to your MCP client</h2>
+
+  <div class="setup-block">
+    <p class="setup-label">Claude Code</p>
+    <pre>claude mcp add agent-audit -- npx -y @fullstackdegen/agent-audit</pre>
+  </div>
+
+  <div class="setup-block">
+    <p class="setup-label">Claude Desktop · Cursor · GitHub Copilot (.mcp.json)</p>
+    <pre>{
   "servers": {
     "agent-audit": {
       "command": "npx",
@@ -305,27 +418,19 @@
     }
   }
 }</pre>
-      </div>
-      <div class="tab">
-        <div class="tab-label">Local development (localhost)</div>
-        <pre>claude mcp add agent-audit-local -- npx -y @fullstackdegen/agent-audit --local</pre>
-      </div>
-    </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <h2>Links</h2>
-    <div class="links">
-      <a class="btn primary" href="https://github.com/fullstackdegen/agent-audit">GitHub</a>
-      <a class="btn" href="https://www.npmjs.com/package/@fullstackdegen/agent-audit">npm package</a>
-      <a class="btn" href="https://github.com/fullstackdegen/agent-audit/blob/main/examples/commalabs-fast-report.md">Example report</a>
-    </div>
-  </section>
-</main>
+  <div class="setup-block">
+    <p class="setup-label">Local development (localhost URLs)</p>
+    <pre>claude mcp add agent-audit-local -- npx -y @fullstackdegen/agent-audit --local</pre>
+  </div>
+</section>
 
 <footer>
-  Agent Audit is open source software released under the MIT license.
-  Built by <a href="https://github.com/fullstackdegen">fullstackdegen</a>.
+  <a href="https://github.com/fullstackdegen/agent-audit">GitHub</a>
+  <a href="https://www.npmjs.com/package/@fullstackdegen/agent-audit">npm</a>
+  <a href="https://github.com/fullstackdegen/agent-audit/blob/main/SECURITY.md">Security</a>
+  <a href="https://github.com/fullstackdegen/agent-audit/blob/main/LICENSE">MIT License</a>
 </footer>
 
 </body>
