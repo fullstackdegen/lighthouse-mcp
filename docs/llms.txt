@@ -1,0 +1,30 @@
+# Agent Audit
+
+> Lighthouse-powered MCP server that turns performance, accessibility, SEO, and LLM-visibility audits into structured fix packs for AI coding agents.
+
+Agent Audit is an open-source MCP server published as `@fullstackdegen/agent-audit`. It runs Google Lighthouse against a target URL and converts the output into structured fix packs that AI coding agents (Claude Code, Cursor, GitHub Copilot, Codex) can execute autonomously.
+
+## What it does
+
+- Runs mobile and desktop Lighthouse audits (fast: 1 run, reliable: 3-run medians)
+- Adds same-page intelligence: broken links, canonical tags, robots signals, JSON-LD, Open Graph, LLM visibility, llms.txt readiness
+- Merges findings into a prioritized issue list
+- Generates `fixPacks` with repo search hints, implementation steps, and measurable acceptance criteria
+- Returns strict MCP `structuredContent` plus equivalent Markdown
+
+## Install
+
+```bash
+npx -y @fullstackdegen/agent-audit
+```
+
+## MCP tool
+
+`analyze_website_performance` — accepts a URL and optional mode (`fast` or `reliable`).
+
+## Links
+
+- Homepage: https://fullstackdegen.github.io/agent-audit/
+- GitHub: https://github.com/fullstackdegen/agent-audit
+- npm: https://www.npmjs.com/package/@fullstackdegen/agent-audit
+- License: MIT

@@ -1,0 +1,29 @@
+{
+  "schema": "https://modelcontextprotocol.io/schemas/2025-03-26/server-card.json",
+  "serverInfo": {
+    "name": "Agent Audit",
+    "version": "0.3.1"
+  },
+  "description": "Turn Lighthouse audits into coding-agent fix packs for Claude Code, Cursor, and Copilot.",
+  "tools": [
+    {
+      "name": "analyze_website_performance",
+      "description": "Runs Lighthouse (mobile + desktop) and bounded page inspection against a target URL. Returns structured fixPacks with repo search hints, implementation steps, and acceptance criteria. Covers performance (Core Web Vitals), accessibility, technical SEO, LLM visibility, and llms.txt readiness.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The publicly accessible URL to audit (HTTP or HTTPS)."
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["fast", "reliable"],
+            "description": "fast: one mobile + one desktop run. reliable: three runs per profile with median aggregation. Defaults to reliable."
+          }
+        },
+        "required": ["url"]
+      }
+    }
+  ]
+}
